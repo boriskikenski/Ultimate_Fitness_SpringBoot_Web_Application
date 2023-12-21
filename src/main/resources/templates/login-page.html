@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<main>
+    <div class="containter mt-5 ">
+        <div class="row justify-content-center mx-0">
+            <div class="col-sm-12 text-center">
+                <h3 class="title-text mb-0">Ultimate Fitness</h3>
+                <h3 class="title-text mb-0">Log in:</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-2">
+        <form action="/login-user" method="post">
+
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+            </div>
+
+            <div class="row justify-content-center m-0">
+                <div class="col-md-5">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mt-3">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row justify-content-center m-0">
+            <div class="col-md-5">
+                <div class="d-grid gap-2">
+                    <a class="btn btn-secondary mt-3" href="/auth/register-personal-info">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--<footer th:replace="footer.html :: common-footer"></footer>-->
+</body>
+</html>

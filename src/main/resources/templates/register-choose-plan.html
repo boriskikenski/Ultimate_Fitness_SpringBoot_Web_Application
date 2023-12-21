@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Select one of potential plans for your goals: </h3>
+            </div>
+        </div>
+
+        <form action="/auth/register-choose-plan" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <input type="number" th:value="${userId}" name="userId" hidden>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <select class="form-select form-select-md mb-3" aria-label=".form-select-lg example" id="plans" name="plan">
+                            <option th:text="${selectedPlan}" th:value="${selectedPlan}" selected></option>
+                            <option th:each="plan : ${potentialPlans}" th:text="${plan}" th:value="${plan}"></option>
+                        </select>
+                        <label for="plans">Plan</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mt-3" name="action" value="continue">Enter previous results</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success mt-1" name="action" value="register">Register</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

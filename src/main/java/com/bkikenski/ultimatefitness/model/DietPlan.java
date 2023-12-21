@@ -18,4 +18,7 @@ public class DietPlan {
     private int maxCalories;
 
     private int minCalories;
+
+    public DietPlan() {
+    }
 }

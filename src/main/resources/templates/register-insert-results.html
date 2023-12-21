@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Enter your results per exercise:</h3>
+            </div>
+        </div>
+        <form action="/auth/register-insert-results" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <input type="number" th:value="${userId}" name="userId" hidden>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="averageTrainingTime" name="averageTrainingTime" placeholder="averageTrainingTime" step=".1">
+                        <label for="averageTrainingTime">Average training time [min]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="benchOneRepMax" name="benchOneRepMax" placeholder="benchOneRepMax" step=".1">
+                        <label for="benchOneRepMax">Bench press 1 rep max [kg]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="deadLiftOneRepMax" name="deadLiftOneRepMax" placeholder="deadLiftOneRepMax" step=".1">
+                        <label for="deadLiftOneRepMax">Deadlift 1 rep max [kg]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="squatOneRepMax" name="squatOneRepMax" placeholder="squatOneRepMax" step=".1">
+                        <label for="squatOneRepMax">Squat 1 rep max [kg]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="overHeadPressOneRepMax" name="overHeadPressOneRepMax" placeholder="overHeadPressOneRepMax" step=".1">
+                        <label for="overHeadPressOneRepMax">Overhead press 1 rep max [kg]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="cleanAndJerkMax" name="cleanAndJerkMax" placeholder="cleanAndJerkMax" step=".1">
+                        <label for="cleanAndJerkMax">Clean and Jerk 1 rep max [kg]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="longestRun" name="longestRun" placeholder="longestRun" step=".1">
+                        <label for="longestRun">Longest run [km]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="bestRunTimeFiveK" name="bestRunTimeFiveK" placeholder="bestRunTimeFiveK" step=".01">
+                        <label for="bestRunTimeFiveK">Best time 5k run [min]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="bestRunTimeTenK" name="bestRunTimeTenK" placeholder="bestRunTimeTenK" step=".01">
+                        <label for="bestRunTimeTenK">Best time 10k run [min]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6">
+                    <h3>Enter your current body size:</h3>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="chestSize" name="chestSize" placeholder="chestSize" step=".1">
+                        <label for="chestSize">Chest size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="waistSize" name="waistSize" placeholder="waistSize" step=".1">
+                        <label for="waistSize">Waist size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="bicepsSize" name="bicepsSize" placeholder="bicepsSize" step=".1">
+                        <label for="bicepsSize">Biceps size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="quadsSize" name="quadsSize" placeholder="quadsSize" step=".1">
+                        <label for="quadsSize">Quads size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mt-3">Register</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

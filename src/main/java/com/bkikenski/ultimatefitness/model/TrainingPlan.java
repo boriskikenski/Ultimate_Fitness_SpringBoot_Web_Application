@@ -16,4 +16,8 @@ public class TrainingPlan {
     private List<Training> trainings;
 
     private double score;
+
+    public TrainingPlan() {
+
+    }
 }

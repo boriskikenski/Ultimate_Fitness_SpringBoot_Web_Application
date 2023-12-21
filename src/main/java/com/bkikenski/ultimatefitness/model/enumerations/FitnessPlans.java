@@ -6,7 +6,7 @@ public enum FitnessPlans {
     CROSSFIT,
     OLYMPIC,
     CARDIO,
-    BASIC3,
-    BASIC4,
-    BASIC5
+    BASIC_3_DAYS,
+    BASIC_4_DAYS,
+    BASIC_5_DAYS
 }

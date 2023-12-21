@@ -28,4 +28,7 @@ public class Results {
 
     @ManyToMany
     private List<Exercise> exercisesResults;
+
+    public Results() {
+    }
 }

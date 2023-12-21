@@ -6,6 +6,5 @@ public enum Goals {
     FITNESS,
     POWER,
     STAMINA,
-    HEALTH,
-    RECREATION
+    HEALTH_AND_RECREATION
 }
