@@ -20,11 +20,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <select class="form-select form-select-md mb-3" aria-label=".form-select-lg example" id="plans" name="plan">
-                            <option th:text="${selectedPlan}" th:value="${selectedPlan}" selected></option>
-                            <option th:each="plan : ${potentialPlans}" th:text="${plan}" th:value="${plan}"></option>
+                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="plans" name="plan">
+                            <option class="mb-1" th:text="${selectedPlan.getFitnessPlan()}" th:value="${selectedPlan}" selected></option>
+                            <option th:each="plan : ${potentialPlans}" th:text="${plan.getFitnessPlan()}" th:value="${plan}"></option>
                         </select>
-                        <label for="plans">Plan</label>
+                        <label for="plans" class="ps-2">Plan</label>
                     </div>
                 </div>
             </div>

@@ -116,11 +116,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <select class="form-select form-select-md mb-3" aria-label=".form-select-lg example" id="goals" name="goal">
-                            <option th:text="${selectedFirst}" th:value="${selectedFirst}" selected></option>
-                            <option th:each="goal : ${goals}" th:text="${goal}" th:value="${goal}"></option>
+                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="goals" name="goal">
+                            <option th:text="${selectedFirst.getGoal()}" th:value="${selectedFirst}" selected></option>
+                            <option th:each="goal : ${goals}" th:text="${goal.getGoal()}" th:value="${goal}"></option>
                         </select>
-                        <label for="goals">Goal</label>
+                        <label for="goals" class="ps-2">Goal</label>
                     </div>
                 </div>
             </div>
