@@ -8,4 +8,5 @@ public interface UserService {
     Long createUser(RegisterPersonalInfoDTO request);
     void setFitnessPlan(RegisterChosePlanDTO request);
     void saveInitialResults(RegisterInsertResultsDTO request);
+    void setUserLevel(Long userId);
 }

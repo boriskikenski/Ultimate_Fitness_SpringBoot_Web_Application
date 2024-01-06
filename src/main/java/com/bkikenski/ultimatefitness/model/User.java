@@ -1,9 +1,6 @@
 package com.bkikenski.ultimatefitness.model;
 
-import com.bkikenski.ultimatefitness.model.enumerations.FitnessPlans;
-import com.bkikenski.ultimatefitness.model.enumerations.Goals;
-import com.bkikenski.ultimatefitness.model.enumerations.Role;
-import com.bkikenski.ultimatefitness.model.enumerations.Sex;
+import com.bkikenski.ultimatefitness.model.enumerations.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,7 +38,8 @@ public class User {
 
     private float startWeight;
 
-    private int level;
+    @Enumerated(value = EnumType.STRING)
+    private FitnessLevels level;
 
     @Enumerated(value = EnumType.STRING)
     private Goals goal;
@@ -52,8 +50,8 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private FitnessPlans currentFitnessPlan;
 
-    @OneToOne
-    private TrainingPlan trainingPlan;
+    @ManyToMany()
+    private List<Training> trainingPlan; //TODO relacijata
 
     @OneToOne
     private DietPlan dietPlan;

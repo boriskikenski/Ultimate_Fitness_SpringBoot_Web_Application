@@ -1,14 +1,18 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
+import com.bkikenski.ultimatefitness.model.Results;
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.dto.RegisterChosePlanDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterInsertResultsDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterPersonalInfoDTO;
+import com.bkikenski.ultimatefitness.model.enumerations.FitnessLevels;
 import com.bkikenski.ultimatefitness.model.enumerations.Role;
+import com.bkikenski.ultimatefitness.model.enumerations.Sex;
 import com.bkikenski.ultimatefitness.model.exceptions.PasswordsDoNotMatchException;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;
 import com.bkikenski.ultimatefitness.model.exceptions.UsernameAlreadyExistsException;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
+import com.bkikenski.ultimatefitness.service.ExerciseService;
 import com.bkikenski.ultimatefitness.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,10 +21,13 @@ import org.springframework.stereotype.Service;
 public class UserServiceImplementation implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final ExerciseService exerciseService;
 
-    public UserServiceImplementation(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserServiceImplementation(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository,
+                                     ExerciseService exerciseService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.exerciseService = exerciseService;
     }
 
     @Override
@@ -57,5 +64,41 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void saveInitialResults(RegisterInsertResultsDTO request) {
         //TODO implement after fully defined use and creation of Exercise entity
+        // !!!!!!!! save only non-null and not-empty
+        setUserLevel(request.getUserId()); //ToDo change location of this call
+    }
+
+    @Override
+    public void setUserLevel(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Sex userSex = user.getSex();
+
+        if (user.getResults().isEmpty()){
+            user.setLevel(FitnessLevels.BEGINNER);
+        } else {
+            Results userLastResults = user.getResults().get(user.getResults().size() - 1);
+            float userBodyWeight = userLastResults.getWeight();
+
+            int exerciseSumLevel =userLastResults.getExercisesResults().stream()
+                    .mapToInt(exercise ->
+                            this.exerciseService.getExerciseLevel(
+                                    exercise.getExerciseName(), userSex,
+                                    exercise.getCurrentWorkingWeight() / userBodyWeight))
+                    .sum();
+            float userLevel = (float) exerciseSumLevel / userLastResults.getExercisesResults().size();
+
+            if (userLevel < 1)
+                user.setLevel(FitnessLevels.BEGINNER);
+            else if (userLevel < 2)
+                user.setLevel(FitnessLevels.INTERMEDIATE);
+            else if (userLevel < 3)
+                user.setLevel(FitnessLevels.ADVANCED);
+            else if (userLevel < 4)
+                user.setLevel(FitnessLevels.EXPERT);
+            else if (userLevel < 5)
+                user.setLevel(FitnessLevels.PROFESSIONAL);
+        }
+
+        userRepository.save(user);
     }
 }
