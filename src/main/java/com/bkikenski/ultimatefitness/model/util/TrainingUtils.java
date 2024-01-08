@@ -12,6 +12,7 @@ public class TrainingUtils {
     public static final List<MuscleGroup> PUSH_DAY_MUSCLE_GROUPS = List.of(MuscleGroup.CHEST, MuscleGroup.SHOULDERS,
             MuscleGroup.TRICEPS);
     public static final List<MuscleGroup> LEG_DAY_MUSCLE_GROUPS = List.of(MuscleGroup.LEGS, MuscleGroup.CALF);
+    public static final List<MuscleGroup> FULL_BODY = List.of(MuscleGroup.FULL_BODY);
 
     public static final List<Exercises> BODYBUILDING_BEGINNER_EXERCISES = List.of();
     public static final List<Exercises> BODYBUILDING_BEGINNER_PUSH_EXERCISES = List.of();
@@ -96,4 +97,56 @@ public class TrainingUtils {
     public static final List<Exercises> POWERLIFTING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES = List.of();
     public static final List<Exercises> POWERLIFTING_PROFESSIONAL_LEG_EXERCISES = List.of();
     public static final List<Exercises> POWERLIFTING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES = List.of();
+
+    public static final List<Exercises> CROSSFIT_BEGINNER_EXERCISES = List.of();
+    public static final List<Exercises> CROSSFIT_BEGINNER_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_BEGINNER_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_BEGINNER_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_THREE = List.of();
+
+    public static final List<Exercises> CROSSFIT_INTERMEDIATE_EXERCISES = List.of();
+    public static final List<Exercises> CROSSFIT_INTERMEDIATE_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_INTERMEDIATE_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_INTERMEDIATE_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_THREE = List.of();
+
+    public static final List<Exercises> CROSSFIT_ADVANCED_EXERCISES = List.of();
+    public static final List<Exercises> CROSSFIT_ADVANCED_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_ADVANCED_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_ADVANCED_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_ADVANCED_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_FOUR = List.of();
+
+    public static final List<Exercises> CROSSFIT_EXPERT_EXERCISES = List.of();
+    public static final List<Exercises> CROSSFIT_EXPERT_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_EXPERT_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_EXPERT_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_EXPERT_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_EXPERT_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_EXPERT_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_EXPERT_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_EXPERT_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CROSSFIT_EXPERT_TRAINING_FIVE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_EXPERT_TRAINING_FIVE = List.of();
+
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_EXERCISES = List.of();
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_ONE = List.of();
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_TWO = List.of();
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_THREE = List.of();
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_TRAINING_FIVE = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE = List.of();
+    public static final List<Exercises> CROSSFIT_PROFESSIONAL_TRAINING_SIX = List.of();
+    public static final List<Exercises> CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_SIX = List.of();
 }

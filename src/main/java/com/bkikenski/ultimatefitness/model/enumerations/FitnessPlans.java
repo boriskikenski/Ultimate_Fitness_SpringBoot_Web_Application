@@ -5,10 +5,7 @@ public enum FitnessPlans {
     POWERLIFTING("Powerlifting"),
     CROSSFIT("Crossfit"),
     OLYMPIC("Olympic"),
-    CARDIO("Cardio"),
-    BASIC_3_DAYS("Basic 3 days plan"),
-    BASIC_4_DAYS("Basic 4 days plan"),
-    BASIC_5_DAYS("Basic 5 days plan")
+    CARDIO("Cardio")
     ;
 
     private final String fitnessPlan;

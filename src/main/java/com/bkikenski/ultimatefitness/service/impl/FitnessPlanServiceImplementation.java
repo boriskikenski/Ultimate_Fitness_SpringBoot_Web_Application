@@ -26,13 +26,13 @@ public class FitnessPlanServiceImplementation implements FitnessPlanService {
 
         switch (goal) {
             case LOSE_WEIGHT -> potentialPlans.addAll(List.of(
-                    FitnessPlans.CROSSFIT, FitnessPlans.CARDIO, FitnessPlans.BASIC_5_DAYS
+                    FitnessPlans.CROSSFIT, FitnessPlans.CARDIO
             ));
             case GAIN_WEIGHT -> potentialPlans.addAll(List.of(
-                    FitnessPlans.BODYBUILDING, FitnessPlans.POWERLIFTING, FitnessPlans.BASIC_3_DAYS, FitnessPlans.BASIC_4_DAYS
+                    FitnessPlans.BODYBUILDING, FitnessPlans.POWERLIFTING
             ));
             case FITNESS -> potentialPlans.addAll(List.of(
-                    FitnessPlans.BODYBUILDING, FitnessPlans.OLYMPIC, FitnessPlans.BASIC_4_DAYS, FitnessPlans.BASIC_5_DAYS
+                    FitnessPlans.BODYBUILDING, FitnessPlans.OLYMPIC
             ));
             case POWER -> potentialPlans.addAll(List.of(
                     FitnessPlans.BODYBUILDING, FitnessPlans.POWERLIFTING, FitnessPlans.OLYMPIC
@@ -41,7 +41,7 @@ public class FitnessPlanServiceImplementation implements FitnessPlanService {
                     FitnessPlans.CROSSFIT, FitnessPlans.OLYMPIC, FitnessPlans.CARDIO
             ));
             case HEALTH_AND_RECREATION -> potentialPlans.addAll(List.of(
-                    FitnessPlans.CARDIO, FitnessPlans.BASIC_3_DAYS, FitnessPlans.BASIC_4_DAYS, FitnessPlans.BASIC_5_DAYS
+                    FitnessPlans.BODYBUILDING, FitnessPlans.CROSSFIT, FitnessPlans.CARDIO
             ));
         }
 

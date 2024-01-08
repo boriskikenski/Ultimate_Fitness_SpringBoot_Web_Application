@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Exercises {
-    DEADLIFTS; //enter ratios in decimal format, not percent
+    DEADLIFTS, //enter ratios in decimal format, not percent
+    DEADLIFTS_CROSSFIT; //za vezhbite koi kje se pravat vo crossfito
 
     private final List<Integer> ratioPerLevelMale;
     private final List<Integer> ratioPerLevelFemale;
+
 
     Exercises(String... exerciseConstants) {
         this.ratioPerLevelMale = new ArrayList<>();
