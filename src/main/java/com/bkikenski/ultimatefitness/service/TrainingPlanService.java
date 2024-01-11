@@ -13,7 +13,7 @@ public interface TrainingPlanService {
     void generateBodybuildingPlan(Long userId);
     void setWeightAndRepsBodybuilding(User user);
     void generatePowerliftingPlan(Long userId);
-    void setWeightAndRepsPowerlifting(User user);
+    void setWeightAndRepsPowerliftingAndOlympic(User user);
     void generateCrossfitPlan(Long userId);
     void setWeightAndRepsCrossfit(User user);
     void generateOlympicPlan(Long userId);
