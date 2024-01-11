@@ -6,6 +6,7 @@ import com.bkikenski.ultimatefitness.model.dto.RegisterChosePlanDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterInsertResultsDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterPersonalInfoDTO;
 import com.bkikenski.ultimatefitness.model.enumerations.FitnessLevels;
+import com.bkikenski.ultimatefitness.model.enumerations.FitnessPlans;
 import com.bkikenski.ultimatefitness.model.enumerations.Role;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
 import com.bkikenski.ultimatefitness.model.exceptions.PasswordsDoNotMatchException;
@@ -79,11 +80,17 @@ public class UserServiceImplementation implements UserService {
             Results userLastResults = user.getResults().get(user.getResults().size() - 1);
             float userBodyWeight = userLastResults.getWeight();
 
-            int exerciseSumLevel =userLastResults.getExercisesResults().stream()
-                    .mapToInt(exercise ->
-                            this.exerciseService.getExerciseLevel(
+            int exerciseSumLevel = userLastResults.getExercisesResults().stream()
+                    .mapToInt(exercise -> {
+                        if (user.getCurrentFitnessPlan() != FitnessPlans.CARDIO)
+                            return this.exerciseService.getExerciseLevel(
                                     exercise.getExerciseName(), userSex,
-                                    exercise.getCurrentWorkingWeight() / userBodyWeight))
+                                    exercise.getCurrentWorkingWeight() / userBodyWeight);
+                        else
+                            return this.exerciseService.getExerciseLevel(
+                                    exercise.getExerciseName(), userSex,
+                                    exercise.getPersonalRecord());
+                    })
                     .sum();
             float userLevel = (float) exerciseSumLevel / userLastResults.getExercisesResults().size();
 

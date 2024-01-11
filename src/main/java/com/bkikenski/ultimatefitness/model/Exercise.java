@@ -26,15 +26,9 @@ public class Exercise {
 
     private String description;
 
-    @Enumerated(value = EnumType.STRING)
-    private ExercisePriorityLevel exercisePriorityLevel; //TODO to be removed
-
     @ElementCollection
     @Enumerated(value = EnumType.STRING)
     private List<MuscleGroup> exerciseForMuscleGroup;
-
-    @ElementCollection
-    private List<Integer> exerciseForUserLevels; //TODO to be removed
 
     private float personalRecord;
 

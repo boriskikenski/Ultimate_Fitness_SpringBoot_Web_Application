@@ -201,4 +201,51 @@ public class TrainingUtils {
     public static final List<Exercises> OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE = List.of();
     public static final List<Exercises> OLYMPIC_PROFESSIONAL_TRAINING_SIX = List.of();
     public static final List<Exercises> OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_SIX = List.of();
+    ;
+    public static final List<Exercises> CARDIO_BEGINNER_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_BEGINNER_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_BEGINNER_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_BEGINNER_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_BEGINNER_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_BEGINNER_TRAINING_THREE = List.of();
+
+    public static final List<Exercises> CARDIO_INTERMEDIATE_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_INTERMEDIATE_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_INTERMEDIATE_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_THREE = List.of();
+
+    public static final List<Exercises> CARDIO_ADVANCED_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_ADVANCED_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_ADVANCED_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_ADVANCED_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_ADVANCED_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_ADVANCED_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_ADVANCED_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_ADVANCED_TRAINING_FOUR = List.of();
+
+    public static final List<Exercises> CARDIO_EXPERT_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_EXPERT_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_EXPERT_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_EXPERT_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_EXPERT_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_EXPERT_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_EXPERT_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_EXPERT_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CARDIO_EXPERT_TRAINING_FIVE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_EXPERT_TRAINING_FIVE = List.of();
+
+    public static final List<Exercises> CARDIO_PROFESSIONAL_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_ONE = List.of();
+    public static final List<Exercises> CARDIO_PROFESSIONAL_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_TWO = List.of();
+    public static final List<Exercises> CARDIO_PROFESSIONAL_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_THREE = List.of();
+    public static final List<Exercises> CARDIO_PROFESSIONAL_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR = List.of();
+    public static final List<Exercises> CARDIO_PROFESSIONAL_TRAINING_FIVE = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE = List.of();
+    public static final List<Exercises> CARDIO_PROFESSIONAL_TRAINING_SIX = List.of();
+    public static final List<Exercises> CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_SIX = List.of();
 }

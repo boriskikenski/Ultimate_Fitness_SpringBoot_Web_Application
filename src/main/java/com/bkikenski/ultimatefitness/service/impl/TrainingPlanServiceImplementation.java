@@ -591,7 +591,6 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         List<Exercises> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
         List<Exercises> neverDoneExercises;
 
-
         switch (userFitnessLevel) {
             case BEGINNER -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -732,7 +731,116 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
     @Override
     public void generateCardioPlan(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        FitnessLevels userFitnessLevel = user.getLevel();
+        List<Training> trainingList = new ArrayList<>();
 
+        switch (userFitnessLevel) {
+            case BEGINNER -> {
+                trainingList.add(getTraining(Days.MONDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_BEGINNER_TRAINING_ONE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_BEGINNER_TRAINING_ONE)));
+
+                trainingList.add(getTraining(Days.WEDNESDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_BEGINNER_TRAINING_TWO,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_BEGINNER_TRAINING_TWO)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_BEGINNER_TRAINING_THREE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_BEGINNER_TRAINING_THREE)));
+
+                user.setTrainingPlan(trainingList);
+                userRepository.save(user);
+            }
+            case INTERMEDIATE -> {
+                trainingList.add(getTraining(Days.MONDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_INTERMEDIATE_TRAINING_ONE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_ONE)));
+
+                trainingList.add(getTraining(Days.WEDNESDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_INTERMEDIATE_TRAINING_TWO,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_TWO)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_INTERMEDIATE_TRAINING_THREE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_THREE)));
+
+                user.setTrainingPlan(trainingList);
+                userRepository.save(user);
+            }
+            case ADVANCED -> {
+                trainingList.add(getTraining(Days.MONDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_ADVANCED_TRAINING_ONE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_ADVANCED_TRAINING_ONE)));
+
+                trainingList.add(getTraining(Days.WEDNESDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_ADVANCED_TRAINING_TWO,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_ADVANCED_TRAINING_TWO)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_ADVANCED_TRAINING_THREE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_ADVANCED_TRAINING_THREE)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_ADVANCED_TRAINING_FOUR,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_ADVANCED_TRAINING_FOUR)));
+
+                user.setTrainingPlan(trainingList);
+                userRepository.save(user);
+            }
+            case EXPERT -> {
+                trainingList.add(getTraining(Days.MONDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_EXPERT_TRAINING_ONE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_EXPERT_TRAINING_ONE)));
+
+                trainingList.add(getTraining(Days.WEDNESDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_EXPERT_TRAINING_TWO,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_EXPERT_TRAINING_TWO)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_EXPERT_TRAINING_THREE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_EXPERT_TRAINING_THREE)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_EXPERT_TRAINING_FOUR,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_EXPERT_TRAINING_FOUR)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_EXPERT_TRAINING_FIVE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_EXPERT_TRAINING_FIVE)));
+
+                user.setTrainingPlan(trainingList);
+                userRepository.save(user);
+            }
+            case PROFESSIONAL -> {
+                trainingList.add(getTraining(Days.MONDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_PROFESSIONAL_TRAINING_ONE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_ONE)));
+
+                trainingList.add(getTraining(Days.WEDNESDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_PROFESSIONAL_TRAINING_TWO,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_TWO)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_PROFESSIONAL_TRAINING_THREE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_THREE)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_PROFESSIONAL_TRAINING_FOUR,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_PROFESSIONAL_TRAINING_FIVE,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE)));
+
+                trainingList.add(getTraining(Days.FRIDAY, TrainingUtils.FULL_BODY, 110,
+                        TrainingUtils.CARDIO_PROFESSIONAL_TRAINING_SIX,
+                        getRandomExercises(3, TrainingUtils.CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_SIX)));
+
+                user.setTrainingPlan(trainingList);
+                userRepository.save(user);
+            }
+        }
     }
 
     @Override
