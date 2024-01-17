@@ -57,4 +57,11 @@ public class User {
     private DietPlan dietPlan;
 
     private int dailySteps;
+
+    public float getCurrentWeight() {
+        if (this.results.isEmpty())
+            return this.startWeight;
+        else
+            return this.results.get(this.results.size() - 1).getWeight();
+    }
 }

@@ -14,6 +14,7 @@ public class DietPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //TODO relacija kon user
 
     private int maxCalories;
 
