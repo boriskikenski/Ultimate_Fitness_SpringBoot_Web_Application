@@ -50,7 +50,7 @@ public class UserServiceImplementation implements UserService {
                 .startWeight(request.getWeight())
                 .dailySteps(request.getSteps())
                 .goal(request.getGoal())
-                .role(Role.ROLE_COSTUMER)
+                .role(Role.ROLE_USER)
                 .build())
                 .getUserId();
     }
@@ -66,6 +66,7 @@ public class UserServiceImplementation implements UserService {
     public void saveInitialResults(RegisterInsertResultsDTO request) {
         //TODO implement after fully defined use and creation of Exercise entity
         // !!!!!!!! save only non-null and not-empty
+        //TODO vnimavaj na zavhuvucanje sekogash na tezhinata vo rezultatite, pri kreiranje na rezultati stavi default kilazha
         setUserLevel(request.getUserId()); //ToDo change location of this call
     }
 
