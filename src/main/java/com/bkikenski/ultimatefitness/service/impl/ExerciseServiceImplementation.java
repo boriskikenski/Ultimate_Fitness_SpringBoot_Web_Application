@@ -1,9 +1,9 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
 import com.bkikenski.ultimatefitness.model.Exercise;
-import com.bkikenski.ultimatefitness.model.Results;
+import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
-import com.bkikenski.ultimatefitness.model.enumerations.Exercises;
+import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
 import com.bkikenski.ultimatefitness.service.ExerciseService;
@@ -22,9 +22,9 @@ public class ExerciseServiceImplementation implements ExerciseService {
     }
 
     @Override
-    public int getExerciseLevel(Exercises exercise, Sex sex, float ratio) {
+    public int getExerciseLevel(ExercisesConstants exercise, Sex sex, float ratio) {
         int exerciseLevel = -1;
-        List<Integer> exerciseRatiosPerLevel = new ArrayList<>();
+        List<Double> exerciseRatiosPerLevel = new ArrayList<>();
         switch (sex) {
             case MALE -> exerciseRatiosPerLevel = exercise.getRatioPerLevelMale();
             case FEMALE -> exerciseRatiosPerLevel = exercise.getRatioPerLevelFemale();
@@ -41,12 +41,12 @@ public class ExerciseServiceImplementation implements ExerciseService {
     }
 
     @Override
-    public void setExercisesInitialWeight(User user, List<Exercises> neverDoneExercises) {
+    public void setExercisesInitialWeight(User user, List<ExercisesConstants> neverDoneExercises) {
         Sex userSex = user.getSex();
-        Results userLastResult = user.getResults().get(user.getResults().size() - 1);
-        float userWeight = userLastResult.getWeight();
+        WeeklyResults userLastResult = user.getResults().get(user.getResults().size() - 1);
+        float userWeight = userLastResult.getBodyWeight();
         List<Exercise> userLastResultExercises = userLastResult.getExercisesResults();
-        for (Exercises exercise: neverDoneExercises) {
+        for (ExercisesConstants exercise: neverDoneExercises) {
             userLastResultExercises.add(Exercise.builder()
                     .exerciseName(exercise)
                     .personalRecord(0)
@@ -62,8 +62,8 @@ public class ExerciseServiceImplementation implements ExerciseService {
     }
 
     @Override
-    public List<Exercises> getExercisesForUser(User user) {
-        List<Results> userResults = user.getResults();
+    public List<ExercisesConstants> getExercisesForUser(User user) {
+        List<WeeklyResults> userResults = user.getResults();
         List<Exercise> exercises = userResults.get(userResults.size() - 1).getExercisesResults();
         return exercises.stream()
                 .map(Exercise::getExerciseName)
@@ -71,9 +71,9 @@ public class ExerciseServiceImplementation implements ExerciseService {
     }
 
     @Override
-    public List<Exercises> getNeverDoneExercises(List<Exercises> previousExercises, List<Exercises> exercisesForLevel) {
-        List<Exercises> exercisesList = new ArrayList<>(exercisesForLevel);
-        exercisesList.removeAll(previousExercises);
-        return exercisesList;
+    public List<ExercisesConstants> getNeverDoneExercises(List<ExercisesConstants> previousExercises, List<ExercisesConstants> exercisesConstantsForLevel) {
+        List<ExercisesConstants> exercisesConstantsList = new ArrayList<>(exercisesConstantsForLevel);
+        exercisesConstantsList.removeAll(previousExercises);
+        return exercisesConstantsList;
     }
 }

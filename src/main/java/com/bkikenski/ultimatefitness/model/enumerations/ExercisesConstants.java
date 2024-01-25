@@ -3,7 +3,7 @@ package com.bkikenski.ultimatefitness.model.enumerations;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Exercises {
+public enum ExercisesConstants {
     DEADLIFT("0.3", "0.7", "1", "1.5", "2.2", "0.2", "0.5", "0.7", "1", "1.2", "https://exercisedb.p.rapidapi.com/exercises/exercise/0032"),
     DEADLIFT_CROSSFIT("0.15", "0.35", "0.5", "0.75", "1", "0.1", "0.2", "0.3", "0.4", "0.5", "https://exercisedb.p.rapidapi.com/exercises/exercise/0032"),
     PULL_UPS("3", "6", "9", "12", "15", "1", "2", "5", "7", "9", "https://exercisedb.p.rapidapi.com/exercises/exercise/0651"),
@@ -13,13 +13,13 @@ public enum Exercises {
     BENCH_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/0025"),
     BENCH_PRESS_CROSSFIT("0.2", "0.4", "0.6", "0.8", "1", "0.1", "0.2", "0.4", "0.6", "0.8", "https://exercisedb.p.rapidapi.com/exercises/exercise/0025"),
     INCLINE_BENCH_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/0047"),
-    DECLINE_BENCH_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "https://exercisedb.p.rapidapi.com/exercises/exercise/0033"),
-    OVERHEAD_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "https://exercisedb.p.rapidapi.com/exercises/exercise/0426"),
+    DECLINE_BENCH_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/0033"),
+    OVERHEAD_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/0426"),
     OVERHEAD_PRESS_CROSSFIT("0.2", "0.4", "0.6", "0.8", "1", "0.1", "0.2", "0.4", "0.6", "0.8", "https://exercisedb.p.rapidapi.com/exercises/exercise/0426"),
     LATERAL_RAISES("0.05", "0.1", "0.15", "0.2", "0.25", "0.03", "0.05", "0.07", "0.1", "0.15", "https://exercisedb.p.rapidapi.com/exercises/exercise/0334"),
     FRONT_RAISES("0.05", "0.1", "0.15", "0.2", "0.25", "0.03", "0.05", "0.07", "0.1", "0.15", "https://exercisedb.p.rapidapi.com/exercises/exercise/0310"),
-    DUMBBELL_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "https://exercisedb.p.rapidapi.com/exercises/exercise/0405"),
-    MILITARY_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "https://exercisedb.p.rapidapi.com/exercises/exercise/1457"),
+    DUMBBELL_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/0405"),
+    MILITARY_PRESS("0.3", "0.6", "0.9", "1.3", "1.6", "0.2", "0.35", "0.5", "0.7", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/1457"),
     MILITARY_PRESS_CROSSFIT("0.2", "0.4", "0.6", "0.8", "1", "0.1", "0.2", "0.4", "0.6", "0.8", "https://exercisedb.p.rapidapi.com/exercises/exercise/1457"),
     SQUATS("0.3", "0.7", "1", "1.5", "2.2", "0.2", "0.5", "0.7", "1", "1.2", "https://exercisedb.p.rapidapi.com/exercises/exercise/0043"),
     SQUATS_CROSSFIT("0.15", "0.35", "0.5", "0.75", "1", "0.1", "0.2", "0.3", "0.4", "0.5", "https://exercisedb.p.rapidapi.com/exercises/exercise/0043"),
@@ -50,30 +50,30 @@ public enum Exercises {
     RUN_SPRINT_200_5SETS("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "https://exercisedb.p.rapidapi.com/exercises/exercise/0685")
     ;
 
-    private final List<Integer> ratioPerLevelMale;
-    private final List<Integer> ratioPerLevelFemale;
+    private final List<Double> ratioPerLevelMale;
+    private final List<Double> ratioPerLevelFemale;
     private final String rapidApiUrl;
 
 
-    Exercises(String... exerciseConstants) {
+    ExercisesConstants(String... exerciseConstants) {
         this.ratioPerLevelMale = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            this.ratioPerLevelMale.add(Integer.parseInt(exerciseConstants[i]));
+            this.ratioPerLevelMale.add(Double.parseDouble(exerciseConstants[i]));
         }
 
         this.ratioPerLevelFemale = new ArrayList<>();
         for (int i = 5; i < 10; i++) {
-            this.ratioPerLevelFemale.add(Integer.parseInt(exerciseConstants[i]));
+            this.ratioPerLevelFemale.add(Double.parseDouble(exerciseConstants[i]));
         }
 
         this.rapidApiUrl = exerciseConstants[10];
     }
 
-    public List<Integer> getRatioPerLevelMale() {
+    public List<Double> getRatioPerLevelMale() {
         return this.ratioPerLevelMale;
     }
 
-    public List<Integer> getRatioPerLevelFemale() {
+    public List<Double> getRatioPerLevelFemale() {
         return this.ratioPerLevelFemale;
     }
 }

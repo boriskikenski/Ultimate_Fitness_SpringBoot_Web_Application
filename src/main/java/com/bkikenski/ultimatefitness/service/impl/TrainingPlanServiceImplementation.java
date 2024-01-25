@@ -48,8 +48,8 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         FitnessLevels userFitnessLevel = user.getLevel();
         List<Training> trainingList = new ArrayList<>();
-        List<Exercises> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
-        List<Exercises> neverDoneExercises;
+        List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
+        List<ExercisesConstants> neverDoneExercises;
 
         switch (userFitnessLevel) {
             case BEGINNER -> {
@@ -241,8 +241,8 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     public void generatePowerliftingPlan(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         FitnessLevels userFitnessLevel = user.getLevel();
-        List<Exercises> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
-        List<Exercises> neverDoneExercises;
+        List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
+        List<ExercisesConstants> neverDoneExercises;
         List<Training> trainingList = new ArrayList<>();
 
         switch (userFitnessLevel) {
@@ -413,8 +413,8 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Training> trainingList = new ArrayList<>();
         FitnessLevels userFitnessLevel = user.getLevel();
-        List<Exercises> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
-        List<Exercises> neverDoneExercises;
+        List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
+        List<ExercisesConstants> neverDoneExercises;
 
         switch (userFitnessLevel) {
             case BEGINNER -> {
@@ -589,8 +589,8 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         List<Training> trainingList = new ArrayList<>();
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         FitnessLevels userFitnessLevel = user.getLevel();
-        List<Exercises> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
-        List<Exercises> neverDoneExercises;
+        List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
+        List<ExercisesConstants> neverDoneExercises;
 
         switch (userFitnessLevel) {
             case BEGINNER -> {
@@ -845,8 +845,8 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     }
 
     @Override
-    public Training getTraining(Days day, List<MuscleGroup> muscleGroups, int restTimeSeconds, List<Exercises> baseExercises,
-                                List<Exercises> additionalExercises) {
+    public Training getTraining(Days day, List<MuscleGroup> muscleGroups, int restTimeSeconds, List<ExercisesConstants> baseExercises,
+                                List<ExercisesConstants> additionalExercises) {
         return Training.builder()
                 .day(day)
                 .forMuscleGroup(muscleGroups)
@@ -858,7 +858,7 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     }
 
     @Override
-    public List<Exercises> getRandomExercises(int numberOfExercises, List<Exercises> exercisesFromList) {
+    public List<ExercisesConstants> getRandomExercises(int numberOfExercises, List<ExercisesConstants> exercisesConstantsFromList) {
         return null; //TODO
     }
 }

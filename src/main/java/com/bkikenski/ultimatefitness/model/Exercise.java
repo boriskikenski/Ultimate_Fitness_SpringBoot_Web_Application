@@ -1,8 +1,6 @@
 package com.bkikenski.ultimatefitness.model;
 
-import com.bkikenski.ultimatefitness.model.enumerations.ExercisePriorityLevel;
-import com.bkikenski.ultimatefitness.model.enumerations.Exercises;
-import com.bkikenski.ultimatefitness.model.enumerations.MuscleGroup;
+import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,13 +20,9 @@ public class Exercise {
     private Long id;
 
     @Enumerated(value = EnumType.STRING)
-    private Exercises exerciseName;
+    private ExercisesConstants exerciseName;
 
     private String description;
-
-    @ElementCollection
-    @Enumerated(value = EnumType.STRING)
-    private List<MuscleGroup> exerciseForMuscleGroup;
 
     private float personalRecord;
 

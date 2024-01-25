@@ -47,14 +47,14 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Goals goal;
 
-    @OneToMany
-    private List<Results> results;
+    @OneToMany(mappedBy = "user")
+    private List<WeeklyResults> results;
 
     @Enumerated(value = EnumType.STRING)
     private FitnessPlans currentFitnessPlan;
 
-    @ManyToMany()
-    private List<Training> trainingPlan; //TODO relacijata
+    @OneToMany(mappedBy = "user")
+    private List<Training> trainingPlan;
 
     @OneToOne
     private DietPlan dietPlan;
@@ -65,7 +65,7 @@ public class User implements UserDetails {
         if (this.results.isEmpty())
             return this.startWeight;
         else
-            return this.results.get(this.results.size() - 1).getWeight();
+            return this.results.get(this.results.size() - 1).getBodyWeight();
     }
 
     @Override

@@ -6,9 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-@Entity
+
 @Data
-public class Message {
+public class Message { //Convert to enum
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

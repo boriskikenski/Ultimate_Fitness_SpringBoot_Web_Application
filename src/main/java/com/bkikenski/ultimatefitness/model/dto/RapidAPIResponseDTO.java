@@ -12,17 +12,3 @@ public class RapidAPIResponseDTO {
     private String gifExplanationUrl;
     private List<String> instructions;
 }
-/*
-
-{
-        "bodyPart": "",
-        "equipment": "",
-        "gifUrl": "",
-        "id": "",
-        "name": "",
-        "target": "",
-        "secondaryMuscles": [],
-        "instructions": []
-}
-
-*/

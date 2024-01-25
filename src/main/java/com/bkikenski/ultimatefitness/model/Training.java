@@ -1,7 +1,7 @@
 package com.bkikenski.ultimatefitness.model;
 
 import com.bkikenski.ultimatefitness.model.enumerations.Days;
-import com.bkikenski.ultimatefitness.model.enumerations.Exercises;
+import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.MuscleGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +21,9 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private User user;
+
     @ElementCollection
     @Enumerated(value = EnumType.STRING)
     private List<MuscleGroup> forMuscleGroup;
@@ -31,5 +34,6 @@ public class Training {
     private int restTimeSeconds;
 
     @ElementCollection
-    private List<Exercises> exercises;
+    @Enumerated(value = EnumType.STRING)
+    private List<ExercisesConstants> exercises;
 }

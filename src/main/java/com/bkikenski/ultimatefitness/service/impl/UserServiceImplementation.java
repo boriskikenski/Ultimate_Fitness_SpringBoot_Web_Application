@@ -1,6 +1,6 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
-import com.bkikenski.ultimatefitness.model.Results;
+import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.dto.RegisterChosePlanDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterInsertResultsDTO;
@@ -78,10 +78,10 @@ public class UserServiceImplementation implements UserService {
         if (user.getResults().isEmpty()){
             user.setLevel(FitnessLevels.BEGINNER);
         } else {
-            Results userLastResults = user.getResults().get(user.getResults().size() - 1);
-            float userBodyWeight = userLastResults.getWeight();
+            WeeklyResults userLastWeeklyResults = user.getResults().get(user.getResults().size() - 1);
+            float userBodyWeight = userLastWeeklyResults.getBodyWeight();
 
-            int exerciseSumLevel = userLastResults.getExercisesResults().stream()
+            int exerciseSumLevel = userLastWeeklyResults.getExercisesResults().stream()
                     .mapToInt(exercise -> {
                         if (user.getCurrentFitnessPlan() != FitnessPlans.CARDIO)
                             return this.exerciseService.getExerciseLevel(
@@ -93,7 +93,7 @@ public class UserServiceImplementation implements UserService {
                                     exercise.getPersonalRecord());
                     })
                     .sum();
-            float userLevel = (float) exerciseSumLevel / userLastResults.getExercisesResults().size();
+            float userLevel = (float) exerciseSumLevel / userLastWeeklyResults.getExercisesResults().size();
 
             if (userLevel < 1)
                 user.setLevel(FitnessLevels.BEGINNER);

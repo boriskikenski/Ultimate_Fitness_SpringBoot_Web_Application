@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Data
 @Entity
-public class Results {
+public class WeeklyResults {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,14 +21,14 @@ public class Results {
     @ManyToOne
     private User user;
 
-    private float weight;
+    private float bodyWeight;
 
     @ElementCollection
     private Map<MuscleGroup, Float> dimensionsPerBodyPart;
 
-    @ManyToMany
+    @OneToMany
     private List<Exercise> exercisesResults;
 
-    public Results() {
+    public WeeklyResults() {
     }
 }
