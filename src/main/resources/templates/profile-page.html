@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Profile</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.name}" class="form-control"
+                           style="background-color: transparent" id="floatingName"  placeholder="Name" disabled>
+                    <label for="floatingName">Name</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.surname}" class="form-control"
+                           style="background-color: transparent" id="floatingSurname"  placeholder="Surname" disabled>
+                    <label for="floatingSurname">Surname</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.username}" class="form-control"
+                           style="background-color: transparent" id="floatingUsername"  placeholder="username" disabled>
+                    <label for="floatingUsername">Username</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.sex}" class="form-control"
+                           style="background-color: transparent" id="floatingSex"  placeholder="sex" disabled>
+                    <label for="floatingSex">Sex</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.age}" class="form-control"
+                           style="background-color: transparent" id="floatingAge"  placeholder="sex" disabled>
+                    <label for="floatingAge">Age</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.height}" class="form-control"
+                           style="background-color: transparent" id="floatingHeight"  placeholder="height" disabled>
+                    <label for="floatingHeight">Height</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.weight}" class="form-control"
+                           style="background-color: transparent" id="floatingWeight"  placeholder="weight" disabled>
+                    <label for="floatingWeight">Weight</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.goal.getGoal()}" class="form-control"
+                           style="background-color: transparent" id="floatingGoal"  placeholder="goal" disabled>
+                    <label for="floatingGoal">Goal</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.currentFitnessPlan.getFitnessPlan()}" class="form-control"
+                           style="background-color: transparent" id="floatingFitnessPlan"  placeholder="currentFitnessPlan" disabled>
+                    <label for="floatingFitnessPlan">Fitness Plan</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${user.dailySteps}" class="form-control"
+                           style="background-color: transparent" id="floatingDailySteps"  placeholder="dailySteps" disabled>
+                    <label for="floatingDailySteps">Daily Steps</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-3 ">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="/update-personal-info" class="btn btn-secondary">Update personal information</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3 ">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="/update-goal" class="btn btn-secondary">Change Goal</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3 ">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="/update-training-plan" class="btn btn-secondary">Change Training Plan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
