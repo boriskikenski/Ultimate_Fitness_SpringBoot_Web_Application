@@ -5,6 +5,7 @@ import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.dto.RegisterChosePlanDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterInsertResultsDTO;
 import com.bkikenski.ultimatefitness.model.dto.RegisterPersonalInfoDTO;
+import com.bkikenski.ultimatefitness.model.dto.UserDTO;
 import com.bkikenski.ultimatefitness.model.enumerations.FitnessLevels;
 import com.bkikenski.ultimatefitness.model.enumerations.FitnessPlans;
 import com.bkikenski.ultimatefitness.model.enumerations.Role;
@@ -53,6 +54,23 @@ public class UserServiceImplementation implements UserService {
                 .role(Role.ROLE_USER)
                 .build())
                 .getUserId();
+    }
+
+    @Override
+    public UserDTO getUserDetails(String username) {
+        User user = this.userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        return UserDTO.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(username)
+                .sex(user.getSex())
+                .age(user.getAge())
+                .height(user.getHeight())
+                .weight(user.getCurrentWeight())
+                .goal(user.getGoal())
+                .currentFitnessPlan(user.getCurrentFitnessPlan())
+                .dailySteps(user.getDailySteps())
+                .build();
     }
 
     @Override
