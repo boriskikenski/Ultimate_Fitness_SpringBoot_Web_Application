@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Chose goal: </h3>
+            </div>
+        </div>
+
+        <form action="/profile/update-goal" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="goals" name="goal">
+                            <option th:text="${selectedFirst.getGoal()}" th:value="${selectedFirst}" selected></option>
+                            <option th:each="goal : ${goals}" th:text="${goal.getGoal()}" th:value="${goal}"></option>
+                        </select>
+                        <label for="goals" class="ps-2">Goal</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mt-3">Update goal</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

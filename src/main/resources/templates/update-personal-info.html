@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Personal info</h3>
+            </div>
+        </div>
+
+        <form action="/profile/update-personal-info" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" th:value="${user.name}" class="form-control" name="name"
+                               style="background-color: transparent" id="floatingName"  placeholder="Name" required>
+                        <label for="floatingName">Name</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" th:value="${user.surname}" class="form-control" name="surname"
+                               style="background-color: transparent" id="floatingSurname"  placeholder="Surname" required>
+                        <label for="floatingSurname">Surname</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" th:value="${user.age}" class="form-control" name="age"
+                               style="background-color: transparent" id="floatingAge"  placeholder="sex" required>
+                        <label for="floatingAge">Age</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" th:value="${user.height}" class="form-control" name="height"
+                               style="background-color: transparent" id="floatingHeight"  placeholder="height" required>
+                        <label for="floatingHeight">Height</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" th:value="${user.dailySteps}" class="form-control" name="dailySteps"
+                               style="background-color: transparent" id="floatingDailySteps"  placeholder="dailySteps" required>
+                        <label for="floatingDailySteps">Daily Steps</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success mt-3">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

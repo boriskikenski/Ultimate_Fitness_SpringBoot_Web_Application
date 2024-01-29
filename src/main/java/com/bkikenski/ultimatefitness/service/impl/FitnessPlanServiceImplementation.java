@@ -47,4 +47,12 @@ public class FitnessPlanServiceImplementation implements FitnessPlanService {
 
         return potentialPlans;
     }
+
+    @Override
+    public List<FitnessPlans> getPotentialPlans(String username) {
+        Long userId = userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new)
+                .getUserId();
+        return getPotentialPlans(userId);
+    }
 }

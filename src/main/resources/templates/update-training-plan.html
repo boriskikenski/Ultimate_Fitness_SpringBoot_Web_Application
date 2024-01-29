@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Select one of potential plans for your goal: </h3>
+            </div>
+        </div>
+
+        <form action="/profile/update-training-plan" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="plans" name="plan">
+                            <option class="mb-1" th:text="${selectedPlan.getFitnessPlan()}" th:value="${selectedPlan}" selected></option>
+                            <option th:each="plan : ${potentialPlans}" th:text="${plan.getFitnessPlan()}" th:value="${plan}"></option>
+                        </select>
+                        <label for="plans" class="ps-2">Plan</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mt-3">Update training plan</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

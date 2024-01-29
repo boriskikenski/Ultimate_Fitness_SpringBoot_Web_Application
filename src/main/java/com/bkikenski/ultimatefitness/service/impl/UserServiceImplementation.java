@@ -2,14 +2,8 @@ package com.bkikenski.ultimatefitness.service.impl;
 
 import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
-import com.bkikenski.ultimatefitness.model.dto.RegisterChosePlanDTO;
-import com.bkikenski.ultimatefitness.model.dto.RegisterInsertResultsDTO;
-import com.bkikenski.ultimatefitness.model.dto.RegisterPersonalInfoDTO;
-import com.bkikenski.ultimatefitness.model.dto.UserDTO;
-import com.bkikenski.ultimatefitness.model.enumerations.FitnessLevels;
-import com.bkikenski.ultimatefitness.model.enumerations.FitnessPlans;
-import com.bkikenski.ultimatefitness.model.enumerations.Role;
-import com.bkikenski.ultimatefitness.model.enumerations.Sex;
+import com.bkikenski.ultimatefitness.model.dto.*;
+import com.bkikenski.ultimatefitness.model.enumerations.*;
 import com.bkikenski.ultimatefitness.model.exceptions.PasswordsDoNotMatchException;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;
 import com.bkikenski.ultimatefitness.model.exceptions.UsernameAlreadyExistsException;
@@ -57,6 +51,33 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public void updateUserPersonalInfo(String currentUser, UserPersonalInfoDTO userPersonalInfo) {
+        User user = userRepository.findByUsername(currentUser).orElseThrow(UserNotFoundException::new);
+
+        user.setName(userPersonalInfo.getName());
+        user.setSurname(userPersonalInfo.getSurname());
+        user.setAge(userPersonalInfo.getAge());
+        user.setHeight(userPersonalInfo.getHeight());
+        user.setDailySteps(userPersonalInfo.getDailySteps());
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUserGoal(String currentUser, Goals selectedGoal) {
+        User user = userRepository.findByUsername(currentUser).orElseThrow(UserNotFoundException::new);
+        user.setGoal(selectedGoal);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUserFitnessPlan(String currentUser, FitnessPlans chosenPlan) {
+        User user = userRepository.findByUsername(currentUser).orElseThrow(UserNotFoundException::new);
+        user.setCurrentFitnessPlan(chosenPlan);
+        userRepository.save(user);
+    }
+
+    @Override
     public UserDTO getUserDetails(String username) {
         User user = this.userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
         return UserDTO.builder()
@@ -69,6 +90,18 @@ public class UserServiceImplementation implements UserService {
                 .weight(user.getCurrentWeight())
                 .goal(user.getGoal())
                 .currentFitnessPlan(user.getCurrentFitnessPlan())
+                .dailySteps(user.getDailySteps())
+                .build();
+    }
+
+    @Override
+    public UserPersonalInfoDTO getUserPersonalInfoDetails(String username) {
+        User user = this.userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        return UserPersonalInfoDTO.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .age(user.getAge())
+                .height(user.getHeight())
                 .dailySteps(user.getDailySteps())
                 .build();
     }

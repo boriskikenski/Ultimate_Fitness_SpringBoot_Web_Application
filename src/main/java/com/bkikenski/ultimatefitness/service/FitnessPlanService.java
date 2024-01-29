@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface FitnessPlanService {
     List<FitnessPlans> getPotentialPlans(Long id);
+    List<FitnessPlans> getPotentialPlans(String username);
 }
