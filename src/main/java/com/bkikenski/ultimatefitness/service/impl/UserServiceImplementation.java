@@ -1,5 +1,6 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
+import com.bkikenski.ultimatefitness.model.Exercise;
 import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.dto.*;
@@ -7,22 +8,37 @@ import com.bkikenski.ultimatefitness.model.enumerations.*;
 import com.bkikenski.ultimatefitness.model.exceptions.PasswordsDoNotMatchException;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;
 import com.bkikenski.ultimatefitness.model.exceptions.UsernameAlreadyExistsException;
+import com.bkikenski.ultimatefitness.repository.ExerciseRepository;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
+import com.bkikenski.ultimatefitness.repository.WeeklyResultsRepository;
 import com.bkikenski.ultimatefitness.service.ExerciseService;
 import com.bkikenski.ultimatefitness.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants.*;
+import static com.bkikenski.ultimatefitness.model.enumerations.FitnessPlans.CROSSFIT;
+import static com.bkikenski.ultimatefitness.model.enumerations.MuscleGroup.*;
+
 @Service
 public class UserServiceImplementation implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final WeeklyResultsRepository weeklyResultsRepository;
+    private final ExerciseRepository exerciseRepository;
     private final ExerciseService exerciseService;
 
     public UserServiceImplementation(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository,
-                                     ExerciseService exerciseService) {
+                                     WeeklyResultsRepository weeklyResultsRepository, ExerciseRepository exerciseRepository, ExerciseService exerciseService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.weeklyResultsRepository = weeklyResultsRepository;
+        this.exerciseRepository = exerciseRepository;
         this.exerciseService = exerciseService;
     }
 
@@ -115,10 +131,106 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public void saveInitialResults(RegisterInsertResultsDTO request) {
-        //TODO implement after fully defined use and creation of Exercise entity
-        // !!!!!!!! save only non-null and not-empty
-        //TODO vnimavaj na zavhuvucanje sekogash na tezhinata vo rezultatite, pri kreiranje na rezultati stavi default kilazha
-        setUserLevel(request.getUserId()); //ToDo change location of this call
+        User user = userRepository.findById(request.getUserId()).orElseThrow(UserNotFoundException::new);
+        FitnessPlans userPlan = user.getCurrentFitnessPlan();
+        WeeklyResults initialResult = new WeeklyResults();
+        List<WeeklyResults> weeklyResults = new ArrayList<>();
+        Map<MuscleGroup, Float> initialDimensionsPerBodyPart = new HashMap<>();
+        List<Exercise> initialExercises = new ArrayList<>();
+
+        if (isValid(request.getBenchOneRepMax())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(userPlan == CROSSFIT ? BENCH_PRESS_CROSSFIT : BENCH_PRESS)
+                    .personalRecord(request.getBenchOneRepMax())
+                    .currentWorkingWeight(request.getBenchOneRepMax() * 0.8f)
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getDeadLiftOneRepMax())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(userPlan == CROSSFIT ? DEADLIFT_CROSSFIT : DEADLIFT)
+                    .personalRecord(request.getDeadLiftOneRepMax())
+                    .currentWorkingWeight(request.getDeadLiftOneRepMax() * 0.8f)
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getSquatOneRepMax())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(userPlan == CROSSFIT ? SQUATS_CROSSFIT : SQUATS)
+                    .personalRecord(request.getSquatOneRepMax())
+                    .currentWorkingWeight(request.getSquatOneRepMax() * 0.8f)
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getOverHeadPressOneRepMax())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(userPlan == CROSSFIT ? OVERHEAD_PRESS_CROSSFIT : OVERHEAD_PRESS)
+                    .personalRecord(request.getOverHeadPressOneRepMax())
+                    .currentWorkingWeight(request.getOverHeadPressOneRepMax() * 0.8f)
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getCleanAndJerkMax())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(userPlan == CROSSFIT ? CLEAN_AND_JERK_CROSSFIT : CLEAN_AND_JERK)
+                    .personalRecord(request.getCleanAndJerkMax())
+                    .currentWorkingWeight(request.getCleanAndJerkMax() * 0.8f)
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getLongestRun())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(RUN)
+                    .personalRecord(request.getLongestRun())
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getBestRunTimeFiveK())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(RUN_5K)
+                    .personalRecord(request.getBestRunTimeFiveK())
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getBestRunTimeTenK())) {
+            Exercise e = Exercise.builder()
+                    .exerciseName(RUN_10K)
+                    .personalRecord(request.getBestRunTimeTenK())
+                    .build();
+            exerciseRepository.save(e);
+            initialExercises.add(e);
+        }
+        if (isValid(request.getChestSize())) {
+            initialDimensionsPerBodyPart.put(CHEST, request.getChestSize());
+        }
+        if (isValid(request.getWaistSize())) {
+            initialDimensionsPerBodyPart.put(MuscleGroup.ABS, request.getWaistSize());
+        }
+        if (isValid(request.getBicepsSize())) {
+            initialDimensionsPerBodyPart.put(BICEPS, request.getBicepsSize());
+        }
+        if (isValid(request.getQuadsSize())) {
+            initialDimensionsPerBodyPart.put(LEGS, request.getQuadsSize());
+        }
+
+        initialResult.setExercisesResults(initialExercises);
+        initialResult.setDimensionsPerBodyPart(initialDimensionsPerBodyPart);
+        initialResult.setUser(user);
+        weeklyResultsRepository.save(initialResult);
+        weeklyResults.add(initialResult);
+        user.setResults(weeklyResults);
+        userRepository.save(user);
+    }
+
+    private boolean isValid(Float field) {
+        return field != null && !field.isNaN();
     }
 
     @Override

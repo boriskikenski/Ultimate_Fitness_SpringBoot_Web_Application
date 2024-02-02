@@ -5,7 +5,9 @@ import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
+import com.bkikenski.ultimatefitness.repository.ExerciseRepository;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
+import com.bkikenski.ultimatefitness.repository.WeeklyResultsRepository;
 import com.bkikenski.ultimatefitness.service.ExerciseService;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class ExerciseServiceImplementation implements ExerciseService {
     private final UserRepository userRepository;
+    private final WeeklyResultsRepository weeklyResultsRepository;
+    private final ExerciseRepository exerciseRepository;
 
-    public ExerciseServiceImplementation(UserRepository userRepository) {
+    public ExerciseServiceImplementation(UserRepository userRepository, WeeklyResultsRepository weeklyResultsRepository, ExerciseRepository exerciseRepository) {
         this.userRepository = userRepository;
+        this.weeklyResultsRepository = weeklyResultsRepository;
+        this.exerciseRepository = exerciseRepository;
     }
 
     @Override
@@ -43,31 +49,53 @@ public class ExerciseServiceImplementation implements ExerciseService {
     @Override
     public void setExercisesInitialWeight(User user, List<ExercisesConstants> neverDoneExercises) {
         Sex userSex = user.getSex();
-        WeeklyResults userLastResult = user.getResults().get(user.getResults().size() - 1);
-        float userWeight = userLastResult.getBodyWeight();
-        List<Exercise> userLastResultExercises = userLastResult.getExercisesResults();
+        float userWeight = user.getCurrentWeight();
+        WeeklyResults userLastResult = new WeeklyResults();
+        List<Exercise> userLastResultExercises = new ArrayList<>();
+
+        List<Integer> l = new ArrayList<>();
+        l.add(0);
         for (ExercisesConstants exercise: neverDoneExercises) {
-            userLastResultExercises.add(Exercise.builder()
+            Exercise e = (Exercise.builder()
                     .exerciseName(exercise)
                     .personalRecord(0)
                     .previousWeights(new ArrayList<>())
-                    .lastTrainingRepsPerSet(new ArrayList<>())
+                    .lastTrainingRepsPerSet(l)
                     .nextExceptedRepsPerSet(new ArrayList<>())
                     .currentWorkingWeight(userSex == Sex.MALE ?
                             (float) (exercise.getRatioPerLevelMale().get(0) - 0.15) * userWeight :
                             (float) (exercise.getRatioPerLevelFemale().get(0) - 0.15) * userWeight)
                     .build());
+            exerciseRepository.save(e);
+            userLastResultExercises.add(e);
+
         }
-        userRepository.save(user);
+        userLastResult.setExercisesResults(userLastResultExercises);
+        userLastResult.setUser(user);
+        weeklyResultsRepository.save(userLastResult);
+
+        if (!user.getResults().isEmpty()){
+            user.getResults().add(userLastResult);
+        } else {
+            List<WeeklyResults> tmp = new ArrayList<>();
+            tmp.add(userLastResult);
+            user.setResults(tmp);
+        }
+        userRepository.save(user); //todo tuka pagja
     }
 
     @Override
     public List<ExercisesConstants> getExercisesForUser(User user) {
         List<WeeklyResults> userResults = user.getResults();
-        List<Exercise> exercises = userResults.get(userResults.size() - 1).getExercisesResults();
-        return exercises.stream()
-                .map(Exercise::getExerciseName)
-                .collect(Collectors.toList());
+
+        if (userResults.isEmpty())
+            return new ArrayList<>();
+        else {
+            List<Exercise> exercises = userResults.get(userResults.size() - 1).getExercisesResults();
+            return exercises.stream()
+                    .map(Exercise::getExerciseName)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

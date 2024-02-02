@@ -82,6 +82,7 @@ public class AuthController {
             return new ModelAndView("redirect:/auth/register-insert-results");
         } else {
             userService.setFitnessPlan(request);
+            userService.setUserLevel(request.getUserId());
             trainingPlanService.generateTrainingPlan(request.getUserId());
             dietPlanService.generateDietPlan(request.getUserId());
             return new ModelAndView("redirect:/login");
@@ -91,6 +92,7 @@ public class AuthController {
     @PostMapping("/register-insert-results")
     public String registerStepThree(RegisterInsertResultsDTO request){
         userService.saveInitialResults(request);
+        userService.setUserLevel(request.getUserId());
         trainingPlanService.generateTrainingPlan(request.getUserId());
         dietPlanService.generateDietPlan(request.getUserId());
         return "redirect:/login";

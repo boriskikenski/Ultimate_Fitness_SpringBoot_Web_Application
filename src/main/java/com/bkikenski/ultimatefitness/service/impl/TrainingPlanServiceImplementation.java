@@ -5,6 +5,8 @@ import com.bkikenski.ultimatefitness.model.Training;
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.enumerations.*;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;
+import com.bkikenski.ultimatefitness.repository.ExerciseRepository;
+import com.bkikenski.ultimatefitness.repository.TrainingRepository;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
 import com.bkikenski.ultimatefitness.service.ExerciseService;
 import com.bkikenski.ultimatefitness.service.TrainingPlanService;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,10 +24,15 @@ import static com.bkikenski.ultimatefitness.model.util.TrainingUtils.*;
 @Service
 public class TrainingPlanServiceImplementation implements TrainingPlanService {
     private final UserRepository userRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final TrainingRepository trainingRepository;
     private final ExerciseService exerciseService;
 
-    public TrainingPlanServiceImplementation(UserRepository userRepository, ExerciseService exerciseService) {
+    public TrainingPlanServiceImplementation(UserRepository userRepository, ExerciseRepository exerciseRepository,
+                                             TrainingRepository trainingRepository, ExerciseService exerciseService) {
         this.userRepository = userRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.trainingRepository = trainingRepository;
         this.exerciseService = exerciseService;
     }
 
@@ -47,7 +55,6 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     public void generateBodybuildingPlan(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         FitnessLevels userFitnessLevel = user.getLevel();
-        List<Training> trainingList = new ArrayList<>();
         List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
         List<ExercisesConstants> neverDoneExercises;
 
@@ -59,20 +66,18 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsBodybuilding(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_BEGINNER_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_BEGINNER_PULL_EXERCISES)));
+                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_BEGINNER_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, PUSH_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.WEDNESDAY, PUSH_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_BEGINNER_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_BEGINNER_PUSH_EXERCISES)));
+                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_BEGINNER_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, LEG_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.FRIDAY, LEG_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_BEGINNER_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_BEGINNER_LEG_EXERCISES)));
+                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_BEGINNER_LEG_EXERCISES), user);
 
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
             }
             case INTERMEDIATE -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -81,24 +86,22 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsBodybuilding(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_INTERMEDIATE_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_INTERMEDIATE_PULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_INTERMEDIATE_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_INTERMEDIATE_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_INTERMEDIATE_PUSH_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_INTERMEDIATE_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.THURSDAY, LEG_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.THURSDAY, LEG_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_INTERMEDIATE_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_INTERMEDIATE_LEG_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_INTERMEDIATE_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 60,
                         BODYBUILDING_INTERMEDIATE_FULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_INTERMEDIATE_FULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_INTERMEDIATE_FULL_EXERCISES), user);
 
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
             }
             case ADVANCED -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -107,28 +110,25 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsBodybuilding(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_ADVANCED_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_ADVANCED_PULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_ADVANCED_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_ADVANCED_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_ADVANCED_PUSH_EXERCISES)));
+                        getRandomExercises(1, BODYBUILDING_ADDITIONAL_ADVANCED_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_ADVANCED_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_ADVANCED_LEG_EXERCISES)));
+                        getRandomExercises(1, BODYBUILDING_ADDITIONAL_ADVANCED_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, PULL_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.FRIDAY, PULL_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_ADVANCED_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_ADVANCED_PULL_EXERCISES)));
+                        getRandomExercises(1, BODYBUILDING_ADDITIONAL_ADVANCED_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.SATURDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_ADVANCED_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_ADVANCED_PUSH_EXERCISES)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, BODYBUILDING_ADDITIONAL_ADVANCED_PUSH_EXERCISES), user);
             }
             case EXPERT -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -137,32 +137,30 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsBodybuilding(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_EXPERT_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_EXPERT_PULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_EXPERT_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_EXPERT_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_EXPERT_PUSH_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_EXPERT_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_EXPERT_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_EXPERT_LEG_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_EXPERT_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.THURSDAY, PULL_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.THURSDAY, PULL_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_EXPERT_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_EXPERT_PULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_EXPERT_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.FRIDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_EXPERT_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_EXPERT_PUSH_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_EXPERT_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_EXPERT_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_EXPERT_LEG_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_EXPERT_LEG_EXERCISES), user);
 
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
             }
             case PROFESSIONAL -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -171,32 +169,30 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsBodybuilding(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_PROFESSIONAL_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_PROFESSIONAL_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_PROFESSIONAL_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.THURSDAY, PULL_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.THURSDAY, PULL_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_PROFESSIONAL_PULL_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.FRIDAY, PUSH_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_PROFESSIONAL_PUSH_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 50,
+                getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 50,
                         BODYBUILDING_PROFESSIONAL_LEG_EXERCISES,
-                        getRandomExercises(3, BODYBUILDING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES)));
+                        getRandomExercises(2, BODYBUILDING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES), user);
 
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
             }
         }
     }
@@ -205,33 +201,85 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     public void setWeightAndRepsBodybuilding(User user) {
         List<Exercise> exercises = user.getResults().get(user.getResults().size() - 1).getExercisesResults();
 
-        for (Exercise exercise: exercises) {
+        for (Exercise exercise : exercises) {
             int lastWorkingReps = exercise.getLastTrainingRepsPerSet().stream().mapToInt(Integer::intValue).sum();
+            List<Integer> reps = new ArrayList<>();
 
-            if (lastWorkingReps < 32)
-                exercise.setNextExceptedRepsPerSet(List.of(8, 8, 8, 8));
-            else if (lastWorkingReps < 34)
-                exercise.setNextExceptedRepsPerSet(List.of(9, 9, 8, 8));
-            else if (lastWorkingReps < 36)
-                exercise.setNextExceptedRepsPerSet(List.of(9, 9, 9, 9));
-            else if (lastWorkingReps < 38)
-                exercise.setNextExceptedRepsPerSet(List.of(10, 10, 9, 9));
-            else if (lastWorkingReps < 40)
-                exercise.setNextExceptedRepsPerSet(List.of(10, 10, 10, 10));
-            else if (lastWorkingReps < 42)
-                exercise.setNextExceptedRepsPerSet(List.of(11, 11, 10, 10));
-            else if (lastWorkingReps < 44)
-                exercise.setNextExceptedRepsPerSet(List.of(11, 11, 11, 11));
-            else if (lastWorkingReps < 46)
-                exercise.setNextExceptedRepsPerSet(List.of(12, 12, 11, 11));
-            else if (lastWorkingReps < 48)
-                exercise.setNextExceptedRepsPerSet(List.of(12, 12, 12, 12));
+            if (lastWorkingReps < 32) {
+                reps.add(8);
+                reps.add(8);
+                reps.add(8);
+                reps.add(8);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 34) {
+                reps.add(9);
+                reps.add(9);
+                reps.add(8);
+                reps.add(8);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 36) {
+                reps.add(9);
+                reps.add(9);
+                reps.add(9);
+                reps.add(9);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 38) {
+                reps.add(10);
+                reps.add(10);
+                reps.add(9);
+                reps.add(9);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 40) {
+                reps.add(10);
+                reps.add(10);
+                reps.add(10);
+                reps.add(10);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 42) {
+                reps.add(11);
+                reps.add(11);
+                reps.add(10);
+                reps.add(10);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 44) {
+                reps.add(11);
+                reps.add(11);
+                reps.add(11);
+                reps.add(11);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 46) {
+                reps.add(12);
+                reps.add(12);
+                reps.add(11);
+                reps.add(11);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 48) {
+                reps.add(12);
+                reps.add(12);
+                reps.add(12);
+                reps.add(12);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
             else {
                 float currentWeight = exercise.getCurrentWorkingWeight();
                 exercise.getPreviousWeights().add(currentWeight);
                 exercise.setCurrentWorkingWeight(currentWeight + 2.5f);
-                exercise.setNextExceptedRepsPerSet(List.of(8, 8, 8, 8));
+                reps.add(8);
+                reps.add(8);
+                reps.add(8);
+                reps.add(8);
+                exercise.setNextExceptedRepsPerSet(reps);
             }
+
+            exerciseRepository.save(exercise);
         }
 
         userRepository.save(user);
@@ -243,7 +291,6 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         FitnessLevels userFitnessLevel = user.getLevel();
         List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
         List<ExercisesConstants> neverDoneExercises;
-        List<Training> trainingList = new ArrayList<>();
 
         switch (userFitnessLevel) {
             case BEGINNER -> {
@@ -253,20 +300,18 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 110,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 110,
                         POWERLIFTING_BEGINNER_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_BEGINNER_PULL_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_BEGINNER_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, PUSH_DAY_MUSCLE_GROUPS, 110,
+                getTraining(Days.WEDNESDAY, PUSH_DAY_MUSCLE_GROUPS, 110,
                         POWERLIFTING_BEGINNER_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_BEGINNER_PUSH_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_BEGINNER_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, LEG_DAY_MUSCLE_GROUPS, 110,
+                getTraining(Days.FRIDAY, LEG_DAY_MUSCLE_GROUPS, 110,
                         POWERLIFTING_BEGINNER_LEG_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_BEGINNER_LEG_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_BEGINNER_LEG_EXERCISES), user);
 
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
             }
             case INTERMEDIATE -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -275,20 +320,17 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 130,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_INTERMEDIATE_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_INTERMEDIATE_PULL_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_INTERMEDIATE_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, PUSH_DAY_MUSCLE_GROUPS, 130,
+                getTraining(Days.WEDNESDAY, PUSH_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_INTERMEDIATE_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_INTERMEDIATE_PUSH_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_INTERMEDIATE_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, LEG_DAY_MUSCLE_GROUPS, 130,
+                getTraining(Days.FRIDAY, LEG_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_INTERMEDIATE_LEG_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_INTERMEDIATE_LEG_EXERCISES)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_INTERMEDIATE_LEG_EXERCISES), user);
             }
             case ADVANCED -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -297,24 +339,21 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 130,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_ADVANCED_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_ADVANCED_PULL_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_ADVANCED_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 130,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_ADVANCED_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_ADVANCED_PUSH_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_ADVANCED_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.THURSDAY, LEG_DAY_MUSCLE_GROUPS, 130,
+                getTraining(Days.THURSDAY, LEG_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_ADVANCED_LEG_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_ADVANCED_LEG_EXERCISES)));
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_ADVANCED_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 60,
+                getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 130,
                         POWERLIFTING_ADVANCED_FULL_EXERCISES,
-                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_ADVANCED_FULL_EXERCISES)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, POWERLIFTING_ADDITIONAL_ADVANCED_FULL_EXERCISES), user);
             }
             case EXPERT -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -323,28 +362,26 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_EXPERT_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_EXPERT_PULL_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_EXPERT_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_EXPERT_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_EXPERT_PUSH_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_EXPERT_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_EXPERT_LEG_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_EXPERT_LEG_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_EXPERT_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, PULL_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.FRIDAY, PULL_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_EXPERT_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_EXPERT_PULL_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_EXPERT_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.SATURDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_EXPERT_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_EXPERT_PUSH_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_EXPERT_PUSH_EXERCISES), user);
 
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
             }
             case PROFESSIONAL -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -352,32 +389,29 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
                 exerciseService.setExercisesInitialWeight(user, neverDoneExercises);
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.MONDAY, PULL_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_PROFESSIONAL_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.TUESDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_PROFESSIONAL_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.WEDNESDAY, LEG_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_PROFESSIONAL_LEG_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.THURSDAY, PULL_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.THURSDAY, PULL_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_PROFESSIONAL_PULL_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PULL_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.FRIDAY, PUSH_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_PROFESSIONAL_PUSH_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES)));
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_PROFESSIONAL_PUSH_EXERCISES), user);
 
-                trainingList.add(getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 150,
+                getTraining(Days.SATURDAY, LEG_DAY_MUSCLE_GROUPS, 150,
                         POWERLIFTING_PROFESSIONAL_LEG_EXERCISES,
-                        getRandomExercises(3, POWERLIFTING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(2, POWERLIFTING_ADDITIONAL_PROFESSIONAL_LEG_EXERCISES), user);
             }
         }
     }
@@ -389,19 +423,49 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         for (Exercise exercise : exercises) {
             int lastWorkingReps = exercise.getLastTrainingRepsPerSet().stream().mapToInt(Integer::intValue).sum();
 
-            if (lastWorkingReps < 15)
-                exercise.setNextExceptedRepsPerSet(List.of(3, 3, 3, 3, 3));
-            else if (lastWorkingReps < 18)
-                exercise.setNextExceptedRepsPerSet(List.of(4, 4, 4, 3, 3));
-            else if (lastWorkingReps < 20)
-                exercise.setNextExceptedRepsPerSet(List.of(4, 4, 4, 4, 4));
-            else if (lastWorkingReps < 23)
-                exercise.setNextExceptedRepsPerSet(List.of(5, 5, 5, 4, 4));
+            List<Integer> reps = new ArrayList<>();
+            if (lastWorkingReps < 15) {
+                reps.add(3);
+                reps.add(3);
+                reps.add(3);
+                reps.add(3);
+                reps.add(3);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 18) {
+                reps.add(4);
+                reps.add(4);
+                reps.add(4);
+                reps.add(3);
+                reps.add(3);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 20) {
+                reps.add(4);
+                reps.add(4);
+                reps.add(4);
+                reps.add(4);
+                reps.add(4);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 23) {
+                reps.add(5);
+                reps.add(5);
+                reps.add(5);
+                reps.add(4);
+                reps.add(4);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
             else {
                 float currentWeight = exercise.getCurrentWorkingWeight();
                 exercise.getPreviousWeights().add(currentWeight);
                 exercise.setCurrentWorkingWeight(currentWeight + 2.5f);
-                exercise.setNextExceptedRepsPerSet(List.of(3, 3, 3, 3, 3));
+                reps.add(3);
+                reps.add(3);
+                reps.add(3);
+                reps.add(3);
+                reps.add(3);
+                exercise.setNextExceptedRepsPerSet(reps);
             }
         }
 
@@ -411,7 +475,6 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     @Override
     public void generateCrossfitPlan(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Training> trainingList = new ArrayList<>();
         FitnessLevels userFitnessLevel = user.getLevel();
         List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
         List<ExercisesConstants> neverDoneExercises;
@@ -424,20 +487,17 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsCrossfit(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 10,
+                getTraining(Days.MONDAY, FULL_BODY, 10,
                         CROSSFIT_BEGINNER_TRAINING_ONE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_ONE)));
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 10,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 10,
                         CROSSFIT_BEGINNER_TRAINING_TWO,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_TWO)));
+                        getRandomExercises(0, CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_BEGINNER_TRAINING_THREE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_THREE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_BEGINNER_TRAINING_THREE), user);
             }
             case INTERMEDIATE -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -446,20 +506,17 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsCrossfit(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 10,
+                getTraining(Days.MONDAY, FULL_BODY, 10,
                         CROSSFIT_INTERMEDIATE_TRAINING_ONE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_ONE)));
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 10,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 10,
                         CROSSFIT_INTERMEDIATE_TRAINING_TWO,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_TWO)));
+                        getRandomExercises(0, CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_INTERMEDIATE_TRAINING_THREE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_THREE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_INTERMEDIATE_TRAINING_THREE), user);
             }
             case ADVANCED -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -468,24 +525,21 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsCrossfit(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 10,
+                getTraining(Days.MONDAY, FULL_BODY, 10,
                         CROSSFIT_ADVANCED_TRAINING_ONE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_ONE)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 10,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 10,
                         CROSSFIT_ADVANCED_TRAINING_TWO,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_TWO)));
+                        getRandomExercises(0, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_ADVANCED_TRAINING_THREE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_THREE)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_ADVANCED_TRAINING_FOUR,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_FOUR)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_ADVANCED_TRAINING_FOUR), user);
             }
             case EXPERT -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -494,28 +548,25 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsCrossfit(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 10,
+                getTraining(Days.MONDAY, FULL_BODY, 10,
                         CROSSFIT_EXPERT_TRAINING_ONE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_ONE)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 10,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 10,
                         CROSSFIT_EXPERT_TRAINING_TWO,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_TWO)));
+                        getRandomExercises(0, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_EXPERT_TRAINING_THREE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_THREE)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_EXPERT_TRAINING_FOUR,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_FOUR)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_FOUR), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_EXPERT_TRAINING_FIVE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_FIVE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_EXPERT_TRAINING_FIVE), user);
             }
             case PROFESSIONAL -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -524,32 +575,29 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsCrossfit(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 10,
+                getTraining(Days.MONDAY, FULL_BODY, 10,
                         CROSSFIT_PROFESSIONAL_TRAINING_ONE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_ONE)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 10,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 10,
                         CROSSFIT_PROFESSIONAL_TRAINING_TWO,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_TWO)));
+                        getRandomExercises(0, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_PROFESSIONAL_TRAINING_THREE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_THREE)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_PROFESSIONAL_TRAINING_FOUR,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR)));
+                        getRandomExercises(2, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_PROFESSIONAL_TRAINING_FIVE,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE)));
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 10,
+                getTraining(Days.FRIDAY, FULL_BODY, 10,
                         CROSSFIT_PROFESSIONAL_TRAINING_SIX,
-                        getRandomExercises(3, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_SIX)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, CROSSFIT_ADDITIONAL_PROFESSIONAL_TRAINING_SIX), user);
             }
         }
     }
@@ -561,23 +609,80 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
         for (Exercise exercise : exercises) {
             int lastWorkingReps = exercise.getLastTrainingRepsPerSet().stream().mapToInt(Integer::intValue).sum();
 
-            if (lastWorkingReps < 75)
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15));
-            else if (lastWorkingReps < 90)
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15, 15));
-            else if (lastWorkingReps < 105)
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15, 15, 15));
-            else if (lastWorkingReps < 120)
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15, 15, 15, 15));
-            else if (lastWorkingReps < 135)
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15, 15, 15, 15, 15));
-            else if (lastWorkingReps < 150)
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15, 15, 15, 15, 15, 15));
+            List<Integer> reps = new ArrayList<>();
+            if (lastWorkingReps < 75) {
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 90) {
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 105) {
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 120) {
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 135) {
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
+            else if (lastWorkingReps < 150) {
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
+            }
             else {
                 float currentWeight = exercise.getCurrentWorkingWeight();
                 exercise.getPreviousWeights().add(currentWeight);
                 exercise.setCurrentWorkingWeight(currentWeight + 2.5f);
-                exercise.setNextExceptedRepsPerSet(List.of(15, 15, 15, 15, 15));
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                reps.add(15);
+                exercise.setNextExceptedRepsPerSet(reps);
             }
         }
 
@@ -586,7 +691,6 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
     @Override
     public void generateOlympicPlan(Long userId) {
-        List<Training> trainingList = new ArrayList<>();
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         FitnessLevels userFitnessLevel = user.getLevel();
         List<ExercisesConstants> alreadyDoneExercises = exerciseService.getExercisesForUser(user);
@@ -600,20 +704,17 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         OLYMPIC_BEGINNER_TRAINING_ONE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_BEGINNER_TRAINING_ONE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_BEGINNER_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         OLYMPIC_BEGINNER_TRAINING_TWO,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_BEGINNER_TRAINING_TWO)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_BEGINNER_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_BEGINNER_TRAINING_THREE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_BEGINNER_TRAINING_THREE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_BEGINNER_TRAINING_THREE), user);
             }
             case INTERMEDIATE -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -622,20 +723,17 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         OLYMPIC_INTERMEDIATE_TRAINING_ONE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_INTERMEDIATE_TRAINING_ONE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_INTERMEDIATE_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         OLYMPIC_INTERMEDIATE_TRAINING_TWO,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_INTERMEDIATE_TRAINING_TWO)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_INTERMEDIATE_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_INTERMEDIATE_TRAINING_THREE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_INTERMEDIATE_TRAINING_THREE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_INTERMEDIATE_TRAINING_THREE), user);
             }
             case ADVANCED -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -644,24 +742,21 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         OLYMPIC_ADVANCED_TRAINING_ONE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_ONE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         OLYMPIC_ADVANCED_TRAINING_TWO,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_TWO)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_ADVANCED_TRAINING_THREE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_THREE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_ADVANCED_TRAINING_FOUR,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_FOUR)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_ADVANCED_TRAINING_FOUR), user);
             }
             case EXPERT -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -670,28 +765,25 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         OLYMPIC_EXPERT_TRAINING_ONE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_ONE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         OLYMPIC_EXPERT_TRAINING_TWO,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_TWO)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_EXPERT_TRAINING_THREE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_THREE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_EXPERT_TRAINING_FOUR,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_FOUR)));
+                        getRandomExercises(1, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_FOUR), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_EXPERT_TRAINING_FIVE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_FIVE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, OLYMPIC_ADDITIONAL_EXPERT_TRAINING_FIVE), user);
             }
             case PROFESSIONAL -> {
                 neverDoneExercises = exerciseService.getNeverDoneExercises(alreadyDoneExercises,
@@ -700,32 +792,29 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
 
                 setWeightAndRepsPowerliftingAndOlympic(user);
 
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         OLYMPIC_PROFESSIONAL_TRAINING_ONE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_ONE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         OLYMPIC_PROFESSIONAL_TRAINING_TWO,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_TWO)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_PROFESSIONAL_TRAINING_THREE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_THREE)));
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_PROFESSIONAL_TRAINING_FOUR,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR)));
+                        getRandomExercises(1, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_PROFESSIONAL_TRAINING_FIVE,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE)));
+                        getRandomExercises(1, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         OLYMPIC_PROFESSIONAL_TRAINING_SIX,
-                        getRandomExercises(3, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_SIX)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(2, OLYMPIC_ADDITIONAL_PROFESSIONAL_TRAINING_SIX), user);
             }
         }
     }
@@ -734,131 +823,130 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
     public void generateCardioPlan(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         FitnessLevels userFitnessLevel = user.getLevel();
-        List<Training> trainingList = new ArrayList<>();
 
         switch (userFitnessLevel) {
             case BEGINNER -> {
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         CARDIO_BEGINNER_TRAINING_ONE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_BEGINNER_TRAINING_ONE)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_BEGINNER_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         CARDIO_BEGINNER_TRAINING_TWO,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_BEGINNER_TRAINING_TWO)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_BEGINNER_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_BEGINNER_TRAINING_THREE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_BEGINNER_TRAINING_THREE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(1, CARDIO_ADDITIONAL_BEGINNER_TRAINING_THREE), user);
             }
             case INTERMEDIATE -> {
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         CARDIO_INTERMEDIATE_TRAINING_ONE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_ONE)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         CARDIO_INTERMEDIATE_TRAINING_TWO,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_TWO)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_INTERMEDIATE_TRAINING_THREE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_THREE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(0, CARDIO_ADDITIONAL_INTERMEDIATE_TRAINING_THREE), user);
             }
             case ADVANCED -> {
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         CARDIO_ADVANCED_TRAINING_ONE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_ADVANCED_TRAINING_ONE)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_ADVANCED_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         CARDIO_ADVANCED_TRAINING_TWO,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_ADVANCED_TRAINING_TWO)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_ADVANCED_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_ADVANCED_TRAINING_THREE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_ADVANCED_TRAINING_THREE)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_ADVANCED_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_ADVANCED_TRAINING_FOUR,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_ADVANCED_TRAINING_FOUR)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(0, CARDIO_ADDITIONAL_ADVANCED_TRAINING_FOUR), user);
             }
             case EXPERT -> {
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         CARDIO_EXPERT_TRAINING_ONE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_EXPERT_TRAINING_ONE)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_EXPERT_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         CARDIO_EXPERT_TRAINING_TWO,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_EXPERT_TRAINING_TWO)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_EXPERT_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_EXPERT_TRAINING_THREE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_EXPERT_TRAINING_THREE)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_EXPERT_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_EXPERT_TRAINING_FOUR,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_EXPERT_TRAINING_FOUR)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_EXPERT_TRAINING_FOUR), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_EXPERT_TRAINING_FIVE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_EXPERT_TRAINING_FIVE)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(0, CARDIO_ADDITIONAL_EXPERT_TRAINING_FIVE), user);
             }
             case PROFESSIONAL -> {
-                trainingList.add(getTraining(Days.MONDAY, FULL_BODY, 110,
+                getTraining(Days.MONDAY, FULL_BODY, 110,
                         CARDIO_PROFESSIONAL_TRAINING_ONE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_ONE)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_ONE), user);
 
-                trainingList.add(getTraining(Days.WEDNESDAY, FULL_BODY, 110,
+                getTraining(Days.WEDNESDAY, FULL_BODY, 110,
                         CARDIO_PROFESSIONAL_TRAINING_TWO,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_TWO)));
+                        getRandomExercises(0, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_TWO), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_PROFESSIONAL_TRAINING_THREE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_THREE)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_THREE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_PROFESSIONAL_TRAINING_FOUR,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FOUR), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_PROFESSIONAL_TRAINING_FIVE,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE)));
+                        getRandomExercises(1, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_FIVE), user);
 
-                trainingList.add(getTraining(Days.FRIDAY, FULL_BODY, 110,
+                getTraining(Days.FRIDAY, FULL_BODY, 110,
                         CARDIO_PROFESSIONAL_TRAINING_SIX,
-                        getRandomExercises(3, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_SIX)));
-
-                user.setTrainingPlan(trainingList);
-                userRepository.save(user);
+                        getRandomExercises(0, CARDIO_ADDITIONAL_PROFESSIONAL_TRAINING_SIX), user);
             }
         }
     }
 
     @Override
     public Training getTraining(Days day, List<MuscleGroup> muscleGroups, int restTimeSeconds, List<ExercisesConstants> baseExercises,
-                                List<ExercisesConstants> additionalExercises) {
-        return Training.builder()
+                                List<ExercisesConstants> additionalExercises, User user) {
+        Training training = Training.builder()
+                .user(user)
                 .day(day)
                 .forMuscleGroup(muscleGroups)
                 .restTimeSeconds(restTimeSeconds)
                 .exercises(Collections.unmodifiableList(
                         Stream.concat(baseExercises.stream(), additionalExercises.stream())
-                        .collect(Collectors.toList())))
+                                .collect(Collectors.toList())))
                 .build();
+        trainingRepository.save(training);
+        return training;
     }
 
     @Override
-    public List<ExercisesConstants> getRandomExercises(int numberOfExercises, List<ExercisesConstants> exercisesConstantsFromList) {
-        return null; //TODO
+    public List<ExercisesConstants> getRandomExercises(int numberOfExercises,
+                                                       List<ExercisesConstants> exercisesConstantsFromList) {
+        List<ExercisesConstants> chosenExercises = new ArrayList<>();
+        List<Integer> chosenExercisesIndexes = new ArrayList<>();
+
+        while (chosenExercisesIndexes.size() != numberOfExercises) {
+            Integer index = ThreadLocalRandom.current().nextInt(0, exercisesConstantsFromList.size() - 1);
+            if (chosenExercisesIndexes.isEmpty() || !chosenExercisesIndexes.contains(index)){
+                chosenExercises.add(exercisesConstantsFromList.get(index));
+                chosenExercisesIndexes.add(index);
+            }
+        }
+
+        return chosenExercises;
     }
 }

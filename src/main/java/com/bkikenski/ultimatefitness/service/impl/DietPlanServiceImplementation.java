@@ -6,6 +6,7 @@ import com.bkikenski.ultimatefitness.model.enumerations.FitnessLevels;
 import com.bkikenski.ultimatefitness.model.enumerations.Goals;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;
+import com.bkikenski.ultimatefitness.repository.DietPlanRepository;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
 import com.bkikenski.ultimatefitness.service.DietPlanService;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class DietPlanServiceImplementation implements DietPlanService {
     private final UserRepository userRepository;
+    private final DietPlanRepository dietPlanRepository;
 
-    public DietPlanServiceImplementation(UserRepository userRepository) {
+    public DietPlanServiceImplementation(UserRepository userRepository, DietPlanRepository dietPlanRepository) {
         this.userRepository = userRepository;
+        this.dietPlanRepository = dietPlanRepository;
     }
 
     @Override
     public void generateDietPlan(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        DietPlan userDietPlan = user.getDietPlan();
+        DietPlan userDietPlan;
+        if (user.getDietPlan() != null)
+            userDietPlan = user.getDietPlan();
+        else
+            userDietPlan = new DietPlan();
+
         double userBMR = calculateBMR(user);
         int userTDEE = calculateTDEE(userBMR, user.getLevel());
         Goals userGoal = user.getGoal();
@@ -52,7 +60,9 @@ public class DietPlanServiceImplementation implements DietPlanService {
                 userDietPlan.setMaxCalories(userTDEE + 100);
             }
         }
+        dietPlanRepository.save(userDietPlan);
 
+        user.setDietPlan(userDietPlan);
         userRepository.save(user);
     }
 

@@ -5,17 +5,17 @@ import lombok.Data;
 @Data
 public class RegisterInsertResultsDTO {
     private Long userId;
-    private float benchOneRepMax;
-    private float deadLiftOneRepMax;
-    private float squatOneRepMax;
-    private float overHeadPressOneRepMax;
-    private float cleanAndJerkMax;
-    private float longestRun;
-    private float bestRunTimeFiveK;
-    private float bestRunTimeTenK;
-    private float averageTrainingTime;
-    private float chestSize;
-    private float waistSize;
-    private float bicepsSize;
-    private float quadsSize;
+    private Float benchOneRepMax;
+    private Float deadLiftOneRepMax;
+    private Float squatOneRepMax;
+    private Float overHeadPressOneRepMax;
+    private Float cleanAndJerkMax;
+    private Float longestRun;
+    private Float bestRunTimeFiveK;
+    private Float bestRunTimeTenK;
+    private Float averageTrainingTime;
+    private Float chestSize;
+    private Float waistSize;
+    private Float bicepsSize;
+    private Float quadsSize;
 }

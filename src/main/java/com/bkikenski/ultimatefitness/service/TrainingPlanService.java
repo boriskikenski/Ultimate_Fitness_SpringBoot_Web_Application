@@ -18,6 +18,7 @@ public interface TrainingPlanService {
     void setWeightAndRepsCrossfit(User user);
     void generateOlympicPlan(Long userId);
     void generateCardioPlan(Long userId);
-    Training getTraining(Days day, List<MuscleGroup> muscleGroups, int restTime, List<ExercisesConstants> baseExercises, List<ExercisesConstants> additionalExercises);
+    Training getTraining(Days day, List<MuscleGroup> muscleGroups, int restTime, List<ExercisesConstants> baseExercises,
+                         List<ExercisesConstants> additionalExercises, User user);
     List<ExercisesConstants> getRandomExercises(int numberOfExercises, List<ExercisesConstants> exercisesConstantsFromList);
 }
