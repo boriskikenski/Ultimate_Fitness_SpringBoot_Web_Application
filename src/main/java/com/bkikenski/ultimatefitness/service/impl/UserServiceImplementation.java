@@ -1,5 +1,6 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
+import com.bkikenski.ultimatefitness.model.DietPlan;
 import com.bkikenski.ultimatefitness.model.Exercise;
 import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
@@ -120,6 +121,13 @@ public class UserServiceImplementation implements UserService {
                 .height(user.getHeight())
                 .dailySteps(user.getDailySteps())
                 .build();
+    }
+
+    @Override
+    public DietPlan getUserDietPlan(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new)
+                .getDietPlan();
     }
 
     @Override

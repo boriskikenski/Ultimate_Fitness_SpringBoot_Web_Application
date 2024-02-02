@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Your calorie intake range</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${maxCaloriesIntake}" class="form-control"
+                           style="background-color: transparent" id="floatingMaxCaloriesIntake"  placeholder="maxCaloriesIntake" disabled>
+                    <label for="floatingMaxCaloriesIntake">Max calories intake</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${minCaloriesIntake}" class="form-control"
+                           style="background-color: transparent" id="floatingMinCaloriesIntake"  placeholder="minCaloriesIntake" disabled>
+                    <label for="floatingMinCaloriesIntake">Min calories intake</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
