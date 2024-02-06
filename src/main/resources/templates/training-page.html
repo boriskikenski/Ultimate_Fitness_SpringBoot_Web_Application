@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Training</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 70%">Exercises</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="exercise : ${training.exercises}">
+                            <td th:text="${exercise.exerciseName}"></td>
+                            <td>
+                                <div class="d-flex justify-content-center m-0">
+                                    <a th:href="@{'/exercise/{id}' (id=${exercise.id})}" type="button">
+                                        <button type="button" class="btn btn-secondary">Check details</button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Rest time [sec]</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr class="category">
+                            <td th:text="${training.restTimeSeconds}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Training for muscles groups</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="musleGroup : ${training.forMuscleGroup}" class="category">
+                            <td th:text="${musleGroup}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-5">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6 text-center align-items-center">
+                <h3 class="text-center" th:text="${message}"></h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center my-3 ">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="/training-plan" class="btn btn-success">Check training plan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

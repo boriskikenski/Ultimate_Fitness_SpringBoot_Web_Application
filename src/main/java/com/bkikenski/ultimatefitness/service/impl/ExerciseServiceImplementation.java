@@ -52,11 +52,42 @@ public class ExerciseServiceImplementation implements ExerciseService {
         float userWeight = user.getCurrentWeight();
         WeeklyResults userLastResult = new WeeklyResults();
         List<Exercise> userLastResultExercises = new ArrayList<>();
-
         List<Integer> l = new ArrayList<>();
         l.add(0);
+
+        if (user.getResults().size() == 1){
+            List<Exercise> previousExercises = user.getResults().get(user.getResults().size() - 1).getExercisesResults();
+            for (Exercise exercise : previousExercises) {
+                Exercise e = Exercise.builder()
+                        .exerciseName(exercise.getExerciseName())
+                        .personalRecord(exercise.getPersonalRecord())
+                        .previousWeights(new ArrayList<>())
+                        .lastTrainingRepsPerSet(l)
+                        .nextExceptedRepsPerSet(new ArrayList<>())
+                        .currentWorkingWeight(exercise.getCurrentWorkingWeight())
+                        .build();
+                exerciseRepository.save(e);
+                userLastResultExercises.add(e);
+            }
+        } else if (!user.getResults().isEmpty()) {
+            List<Exercise> previousExercises = user.getResults().get(user.getResults().size() - 1).getExercisesResults();
+            for (Exercise exercise : previousExercises) {
+                Exercise e = Exercise.builder()
+                        .exerciseName(exercise.getExerciseName())
+                        .personalRecord(exercise.getPersonalRecord())
+                        .previousWeights(exercise.getPreviousWeights())
+                        .lastTrainingRepsPerSet(exercise.getLastTrainingRepsPerSet())
+                        .nextExceptedRepsPerSet(new ArrayList<>())
+                        .currentWorkingWeight(exercise.getCurrentWorkingWeight())
+                        .build();
+                exerciseRepository.save(e);
+                userLastResultExercises.add(e);
+            }
+        }
+
+
         for (ExercisesConstants exercise: neverDoneExercises) {
-            Exercise e = (Exercise.builder()
+            Exercise e = Exercise.builder()
                     .exerciseName(exercise)
                     .personalRecord(0)
                     .previousWeights(new ArrayList<>())
@@ -65,7 +96,7 @@ public class ExerciseServiceImplementation implements ExerciseService {
                     .currentWorkingWeight(userSex == Sex.MALE ?
                             (float) (exercise.getRatioPerLevelMale().get(0) - 0.15) * userWeight :
                             (float) (exercise.getRatioPerLevelFemale().get(0) - 0.15) * userWeight)
-                    .build());
+                    .build();
             exerciseRepository.save(e);
             userLastResultExercises.add(e);
 
@@ -81,7 +112,7 @@ public class ExerciseServiceImplementation implements ExerciseService {
             tmp.add(userLastResult);
             user.setResults(tmp);
         }
-        userRepository.save(user); //todo tuka pagja
+        userRepository.save(user);
     }
 
     @Override
