@@ -4,8 +4,14 @@
 <body>
 <div th:replace="header.html :: common-header"></div>
 <main>
-    <div>
-        Home Page - Ultimate Fitness
+    <div class="card text-center">
+        <div class="card-header">
+            Ultimate Fitness - Your ultimate fitness coach
+        </div>
+        <div class="card-body my-3">
+            <h5 class="card-title" th:text="${motivationalMessage}"></h5>
+            <a href="/training" class="btn btn-secondary">Check today's training</a>
+        </div>
     </div>
 </main>
 </body>
