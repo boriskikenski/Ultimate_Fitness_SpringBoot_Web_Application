@@ -76,4 +76,8 @@ public enum ExercisesConstants {
     public List<Double> getRatioPerLevelFemale() {
         return this.ratioPerLevelFemale;
     }
+
+    public String getRapidApiUrl() {
+        return this.rapidApiUrl;
+    }
 }

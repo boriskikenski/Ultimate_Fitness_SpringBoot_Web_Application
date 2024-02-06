@@ -3,14 +3,18 @@ package com.bkikenski.ultimatefitness.service.impl;
 import com.bkikenski.ultimatefitness.model.Exercise;
 import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.dto.ExerciseDTO;
+import com.bkikenski.ultimatefitness.model.dto.RapidAPIResponseDTO;
 import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
 import com.bkikenski.ultimatefitness.repository.ExerciseRepository;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
 import com.bkikenski.ultimatefitness.repository.WeeklyResultsRepository;
 import com.bkikenski.ultimatefitness.service.ExerciseService;
+import com.bkikenski.ultimatefitness.service.RapidAPIService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,11 +24,14 @@ public class ExerciseServiceImplementation implements ExerciseService {
     private final UserRepository userRepository;
     private final WeeklyResultsRepository weeklyResultsRepository;
     private final ExerciseRepository exerciseRepository;
+    private final RapidAPIService rapidAPIService;
 
-    public ExerciseServiceImplementation(UserRepository userRepository, WeeklyResultsRepository weeklyResultsRepository, ExerciseRepository exerciseRepository) {
+    public ExerciseServiceImplementation(UserRepository userRepository, WeeklyResultsRepository weeklyResultsRepository,
+                                         ExerciseRepository exerciseRepository, RapidAPIService rapidAPIService) {
         this.userRepository = userRepository;
         this.weeklyResultsRepository = weeklyResultsRepository;
         this.exerciseRepository = exerciseRepository;
+        this.rapidAPIService = rapidAPIService;
     }
 
     @Override
@@ -134,5 +141,19 @@ public class ExerciseServiceImplementation implements ExerciseService {
         List<ExercisesConstants> exercisesConstantsList = new ArrayList<>(exercisesConstantsForLevel);
         exercisesConstantsList.removeAll(previousExercises);
         return exercisesConstantsList;
+    }
+
+    @Override
+    public ExerciseDTO findExerciseById(Long id) throws IOException, InterruptedException {
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow();
+        RapidAPIResponseDTO rapidAPIResponseDTO = rapidAPIService.call(exercise.getExerciseName().getRapidApiUrl());
+        return ExerciseDTO.builder()
+                .id(exercise.getId())
+                .exerciseName(exercise.getExerciseName())
+                .personalRecord(exercise.getPersonalRecord())
+                .nextExceptedRepsPerSet(exercise.getNextExceptedRepsPerSet())
+                .currentWorkingWeight(exercise.getCurrentWorkingWeight())
+                .restApiInfo(rapidAPIResponseDTO)
+                .build();
     }
 }

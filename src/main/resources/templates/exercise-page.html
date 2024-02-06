@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3 th:text="${exercise.exerciseName}"></h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" th:value="${exercise.currentWorkingWeight}" class="form-control"
+                           style="background-color: transparent" id="floatingCurrentWorkingWeight"  placeholder="currentWorkingWeight" disabled>
+                    <label for="floatingCurrentWorkingWeight">Working weight [kg]</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 70%">Set number</th>
+                            <th scope="col">Reps</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="reps, iterStat : ${exercise.nextExceptedRepsPerSet}">
+                            <td th:text="${iterStat.index + 1}"></td>
+                            <td th:text="${reps}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="${exercise.personalRecord}" class="form-control"
+                           style="background-color: transparent" id="personalRecord"  placeholder="personalRecord" disabled>
+                    <label for="personalRecord">Personal record [kg]</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Instructions</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <img th:src="${exercise.restApiInfo.gifExplanationUrl}" alt="Animated GIF">
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%"></th>
+                            <th scope="col">Step by step instructions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="instruction, iterStat : ${exercise.restApiInfo.instructions}">
+                            <td th:text="${iterStat.index + 1}"></td>
+                            <td th:text="${instruction}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>Equipment</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <input type="text" th:value="${exercise.restApiInfo.equipment}" class="form-control"
+                           style="background-color: transparent" id="equipment"  placeholder="equipment" disabled>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>
