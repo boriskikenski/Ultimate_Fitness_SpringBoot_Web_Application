@@ -22,8 +22,6 @@ public class Exercise {
     @Enumerated(value = EnumType.STRING)
     private ExercisesConstants exerciseName;
 
-    private String description;
-
     private float personalRecord;
 
     @ElementCollection

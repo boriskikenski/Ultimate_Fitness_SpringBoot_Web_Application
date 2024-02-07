@@ -92,7 +92,6 @@ public class ExerciseServiceImplementation implements ExerciseService {
             }
         }
 
-
         for (ExercisesConstants exercise: neverDoneExercises) {
             Exercise e = Exercise.builder()
                     .exerciseName(exercise)
@@ -110,6 +109,7 @@ public class ExerciseServiceImplementation implements ExerciseService {
         }
         userLastResult.setExercisesResults(userLastResultExercises);
         userLastResult.setUser(user);
+        userLastResult.setBodyWeight(userWeight);
         weeklyResultsRepository.save(userLastResult);
 
         if (!user.getResults().isEmpty()){

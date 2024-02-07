@@ -467,6 +467,7 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
                 reps.add(3);
                 exercise.setNextExceptedRepsPerSet(reps);
             }
+            exerciseRepository.save(exercise);
         }
 
         userRepository.save(user);
@@ -684,6 +685,7 @@ public class TrainingPlanServiceImplementation implements TrainingPlanService {
                 reps.add(15);
                 exercise.setNextExceptedRepsPerSet(reps);
             }
+            exerciseRepository.save(exercise);
         }
 
         userRepository.save(user);

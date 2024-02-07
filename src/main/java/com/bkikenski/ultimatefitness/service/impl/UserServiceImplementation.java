@@ -242,6 +242,7 @@ public class UserServiceImplementation implements UserService {
         initialResult.setExercisesResults(initialExercises);
         initialResult.setDimensionsPerBodyPart(initialDimensionsPerBodyPart);
         initialResult.setUser(user);
+        initialResult.setBodyWeight(user.getStartWeight());
         weeklyResultsRepository.save(initialResult);
         weeklyResults.add(initialResult);
         user.setResults(weeklyResults);
