@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="head.html :: common-head"></head>
+<body>
+<div th:replace="header.html :: common-header"></div>
+<main>
+    <div class="container mt-2">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <h3>This week trainings</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4" th:each="training : ${trainingPlan}">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 80%" th:text="${training.day}"></th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td th:text="${training.toStringMuscleGroups()}"></td>
+                            <td>
+                                <div class="d-flex justify-content-center m-0">
+                                    <a th:href="@{'/training/{id}' (id=${training.trainingId})}" type="button">
+                                        <button type="button" class="btn btn-secondary">Check training</button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

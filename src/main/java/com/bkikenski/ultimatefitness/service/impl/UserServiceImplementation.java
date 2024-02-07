@@ -1,9 +1,6 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
-import com.bkikenski.ultimatefitness.model.DietPlan;
-import com.bkikenski.ultimatefitness.model.Exercise;
-import com.bkikenski.ultimatefitness.model.WeeklyResults;
-import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.*;
 import com.bkikenski.ultimatefitness.model.dto.*;
 import com.bkikenski.ultimatefitness.model.enumerations.*;
 import com.bkikenski.ultimatefitness.model.exceptions.PasswordsDoNotMatchException;
@@ -128,6 +125,20 @@ public class UserServiceImplementation implements UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new)
                 .getDietPlan();
+    }
+
+    @Override
+    public List<TrainingPlanPageDTO> getUserTrainingPlan(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        List<Training> trainingPlan = user.getTrainingPlan();
+        return trainingPlan.stream()
+                .map(training ->
+                        TrainingPlanPageDTO.builder()
+                                .trainingId(training.getId())
+                                .day(training.getDay())
+                                .trainingForMuscles(training.getForMuscleGroup())
+                                .build())
+                .toList();
     }
 
     @Override

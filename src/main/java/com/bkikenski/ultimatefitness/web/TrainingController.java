@@ -36,6 +36,8 @@ public class TrainingController {
 
     @GetMapping("/{trainingId}")
     public String getTraining(@PathVariable Long trainingId, Model model) {
-        return "";
+        TrainingDTO training = trainingService.findById(trainingId);
+        model.addAttribute("training", training);
+        return "training-page";
     }
 }

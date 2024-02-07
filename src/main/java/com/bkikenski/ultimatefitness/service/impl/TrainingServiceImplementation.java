@@ -62,14 +62,13 @@ public class TrainingServiceImplementation implements TrainingService {
         User user = training.getUser();
         List<Exercise> exercises = user.getResults().get(user.getResults().size() - 1).getExercisesResults();
         List<ExercisesConstants> todayExercisesNames = training.getExercises();
-        List<ExerciseTrainingPageDTO> trainingExercises = exercises.stream()
+        return exercises.stream()
                 .filter(exercise -> todayExercisesNames.contains(exercise.getExerciseName()))
                 .map(exercise -> ExerciseTrainingPageDTO.builder()
                         .exerciseName(exercise.getExerciseName())
                         .id(exercise.getId())
                         .build())
                 .toList();
-        return trainingExercises;
     }
 
 }
