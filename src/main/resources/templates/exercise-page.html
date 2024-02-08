@@ -104,6 +104,57 @@
 
         <div class="row justify-content-center mt-5">
             <div class="col-md-6">
+                <h3>Working weight progress</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center my-3">
+            <div class="col-md-6">
+                <div class="graph-container">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var data = /*[[${data}]]*/ [];
+
+                    var labels = Array.from({ length: data.length }, (_, i) => 'Work weight week ' + (i));
+
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Your progress',
+                                data: data,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value, index, values) {
+                                            return value + ' kg';
+                                        }
+                                    }
+                                }
+                            },
+                            barPercentage: 1,
+                            categoryPercentage: 1
+                        }
+                    });
+                    /*]]>*/
+                </script>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
                 <h3>Enter today's results</h3>
             </div>
         </div>

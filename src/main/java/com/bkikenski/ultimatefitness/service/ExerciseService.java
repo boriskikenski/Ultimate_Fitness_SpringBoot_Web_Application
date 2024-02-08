@@ -16,4 +16,5 @@ public interface ExerciseService {
     List<ExercisesConstants> getNeverDoneExercises(List<ExercisesConstants> previousExercises, List<ExercisesConstants> exercisesConstantsForLevel);
     ExerciseDTO findExerciseById(Long id) throws IOException, InterruptedException;
     void enterResults(Long exerciseId, ExerciseResultsDTO results);
+    List<Float> findAllExerciseWorkingWeights(Long exerciseId);
 }

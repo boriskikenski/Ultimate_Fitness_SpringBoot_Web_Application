@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/exercise")
@@ -24,7 +25,10 @@ public class ExerciseController {
     @GetMapping("/{exerciseId}")
     public String getExercise(@PathVariable Long exerciseId, Model model) throws IOException, InterruptedException {
         ExerciseDTO exerciseDTO = exerciseService.findExerciseById(exerciseId);
+        List<Float> exerciseWorkingWeights = exerciseService.findAllExerciseWorkingWeights(exerciseId);
+
         model.addAttribute("exercise", exerciseDTO);
+        model.addAttribute("data", exerciseWorkingWeights);
         return "exercise-page";
     }
 

@@ -168,4 +168,12 @@ public class ExerciseServiceImplementation implements ExerciseService {
         exercise.setLastTrainingRepsPerSet(results.getReps());
         exerciseRepository.save(exercise);
     }
+
+    @Override
+    public List<Float> findAllExerciseWorkingWeights(Long exerciseId) {
+        Exercise exercise = exerciseRepository.findById(exerciseId).orElseThrow();
+        List<Float> workingWeights = new ArrayList<>(exercise.getPreviousWeights());
+        workingWeights.add(exercise.getCurrentWorkingWeight());
+        return workingWeights;
+    }
 }
