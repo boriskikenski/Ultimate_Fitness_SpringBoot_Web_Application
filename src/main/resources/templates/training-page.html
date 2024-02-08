@@ -79,6 +79,66 @@
             </div>
         </div>
 
+        <form action="/training/insert-body-results" method="post">
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6">
+                    <h3>Enter weight and body size dimensions changes:</h3>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="weight" name="weight" placeholder="weight" step="any" required>
+                        <label for="weight">Weight [kg]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="chestSize" name="chestSize" placeholder="chestSize" step="any" required>
+                        <label for="chestSize">Chest size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="waistSize" name="waistSize" placeholder="waistSize" step="any" required>
+                        <label for="waistSize">Waist size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="bicepsSize" name="bicepsSize" placeholder="bicepsSize" step="any" required>
+                        <label for="bicepsSize">Biceps size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="quadsSize" name="quadsSize" placeholder="quadsSize" step="any" required>
+                        <label for="quadsSize">Quads size [cm]</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success mt-3">Enter results</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </main>
 </body>

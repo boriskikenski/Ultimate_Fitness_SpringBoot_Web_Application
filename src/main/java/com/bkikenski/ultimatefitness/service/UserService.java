@@ -19,4 +19,5 @@ public interface UserService {
     void setFitnessPlan(RegisterChosePlanDTO request);
     void saveInitialResults(RegisterInsertResultsDTO request);
     void setUserLevel(Long userId);
+    void insertBodyResults(String username, InsertBodyResultsDTO results);
 }

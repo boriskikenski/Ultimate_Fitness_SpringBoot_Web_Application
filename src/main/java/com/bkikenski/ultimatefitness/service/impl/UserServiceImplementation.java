@@ -292,4 +292,22 @@ public class UserServiceImplementation implements UserService {
 
         userRepository.save(user);
     }
+
+    @Override
+    public void insertBodyResults(String username, InsertBodyResultsDTO results) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        WeeklyResults weeklyResults = user.getResults().get(user.getResults().size() - 1);
+        Map<MuscleGroup, Float> dimensionsPerBodyPart = new HashMap<>();
+
+        dimensionsPerBodyPart.put(CHEST, results.getChestSize());
+        dimensionsPerBodyPart.put(MuscleGroup.ABS, results.getWaistSize());
+        dimensionsPerBodyPart.put(BICEPS, results.getBicepsSize());
+        dimensionsPerBodyPart.put(LEGS, results.getQuadsSize());
+
+        weeklyResults.setDimensionsPerBodyPart(dimensionsPerBodyPart);
+        weeklyResults.setBodyWeight(results.getWeight());
+
+        weeklyResultsRepository.save(weeklyResults);
+        userRepository.save(user);
+    }
 }
