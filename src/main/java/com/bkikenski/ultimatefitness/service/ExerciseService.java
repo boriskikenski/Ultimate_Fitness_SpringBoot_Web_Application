@@ -2,6 +2,7 @@ package com.bkikenski.ultimatefitness.service;
 
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.dto.ExerciseDTO;
+import com.bkikenski.ultimatefitness.model.dto.ExerciseResultsDTO;
 import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
 
@@ -14,4 +15,5 @@ public interface ExerciseService {
     List<ExercisesConstants> getExercisesForUser(User user);
     List<ExercisesConstants> getNeverDoneExercises(List<ExercisesConstants> previousExercises, List<ExercisesConstants> exercisesConstantsForLevel);
     ExerciseDTO findExerciseById(Long id) throws IOException, InterruptedException;
+    void enterResults(Long exerciseId, ExerciseResultsDTO results);
 }

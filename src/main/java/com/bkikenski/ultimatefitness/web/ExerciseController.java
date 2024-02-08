@@ -1,11 +1,13 @@
 package com.bkikenski.ultimatefitness.web;
 
 import com.bkikenski.ultimatefitness.model.dto.ExerciseDTO;
+import com.bkikenski.ultimatefitness.model.dto.ExerciseResultsDTO;
 import com.bkikenski.ultimatefitness.service.ExerciseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
@@ -24,5 +26,11 @@ public class ExerciseController {
         ExerciseDTO exerciseDTO = exerciseService.findExerciseById(exerciseId);
         model.addAttribute("exercise", exerciseDTO);
         return "exercise-page";
+    }
+
+    @PostMapping("/{exerciseId}/enter-results")
+    public String enterExerciseResults(@PathVariable Long exerciseId, ExerciseResultsDTO exerciseResults) {
+        exerciseService.enterResults(exerciseId, exerciseResults);
+        return String.format("redirect:/exercise/%s", exerciseId);
     }
 }

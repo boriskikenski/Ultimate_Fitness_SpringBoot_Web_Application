@@ -4,6 +4,7 @@ import com.bkikenski.ultimatefitness.model.Exercise;
 import com.bkikenski.ultimatefitness.model.WeeklyResults;
 import com.bkikenski.ultimatefitness.model.User;
 import com.bkikenski.ultimatefitness.model.dto.ExerciseDTO;
+import com.bkikenski.ultimatefitness.model.dto.ExerciseResultsDTO;
 import com.bkikenski.ultimatefitness.model.dto.RapidAPIResponseDTO;
 import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;
@@ -155,5 +156,16 @@ public class ExerciseServiceImplementation implements ExerciseService {
                 .currentWorkingWeight(exercise.getCurrentWorkingWeight())
                 .restApiInfo(rapidAPIResponseDTO)
                 .build();
+    }
+
+    @Override
+    public void enterResults(Long exerciseId, ExerciseResultsDTO results) {
+        Exercise exercise = exerciseRepository.findById(exerciseId).orElseThrow();
+        if (exercise.getPersonalRecord() < results.getWorkingWeight())
+            exercise.setPersonalRecord(results.getWorkingWeight());
+        exercise.getPreviousWeights().add(exercise.getCurrentWorkingWeight());
+        exercise.setCurrentWorkingWeight(results.getWorkingWeight());
+        exercise.setLastTrainingRepsPerSet(results.getReps());
+        exerciseRepository.save(exercise);
     }
 }

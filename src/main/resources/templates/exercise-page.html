@@ -102,6 +102,50 @@
             </div>
         </div>
 
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <h3>Enter today's results</h3>
+            </div>
+        </div>
+
+        <form th:action="'/exercise/' + ${exercise.id} + ' /enter-results'" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="number" th:value="${exercise.currentWorkingWeight}" class="form-control" name="workingWeight"
+                               style="background-color: transparent" id="workingWeight"  placeholder="workingWeight" step="any" required>
+                        <label for="workingWeight">Working weight</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6">
+                    <h6>Reps per working set:</h6>
+                </div>
+            </div>
+
+            <div th:each="reps, iterStat : ${exercise.nextExceptedRepsPerSet}">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="number" th:value="${reps}" class="form-control" name="reps"
+                                   style="background-color: transparent" id="reps"  placeholder="reps" required>
+                            <label for="reps" th:text="'Set ' + ${iterStat.index + 1}"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3 ">
+                <div class="col-md-6">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success mt-3">Submit results</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
     </div>
 </main>
 </body>
