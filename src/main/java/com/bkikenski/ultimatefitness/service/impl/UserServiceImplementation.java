@@ -310,4 +310,14 @@ public class UserServiceImplementation implements UserService {
         weeklyResultsRepository.save(weeklyResults);
         userRepository.save(user);
     }
+
+    @Override
+    public List<Float> getAllUserWeights(String username) {
+        List<Float> weights = new ArrayList<>();
+        User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        List<WeeklyResults> userResults = user.getResults();
+        weights.add(user.getStartWeight());
+        userResults.forEach(weeklyResults -> weights.add(weeklyResults.getBodyWeight()));
+        return weights;
+    }
 }

@@ -20,4 +20,5 @@ public interface UserService {
     void saveInitialResults(RegisterInsertResultsDTO request);
     void setUserLevel(Long userId);
     void insertBodyResults(String username, InsertBodyResultsDTO results);
+    List<Float> getAllUserWeights(String username);
 }
