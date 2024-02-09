@@ -26,7 +26,7 @@ public class PlanGenerationScheduler {
     }
 
     @Scheduled(cron = "0 0 0 * * SUN")
-    public void generateTrainingPlan() {
+    public void generatePlan() {
         List<User> allUsers = userRepository.findAll();
         allUsers.forEach(user -> {
             userService.setUserLevel(user.getUserId());
