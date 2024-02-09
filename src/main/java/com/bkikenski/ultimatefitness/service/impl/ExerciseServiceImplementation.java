@@ -101,8 +101,8 @@ public class ExerciseServiceImplementation implements ExerciseService {
                     .lastTrainingRepsPerSet(l)
                     .nextExceptedRepsPerSet(new ArrayList<>())
                     .currentWorkingWeight(userSex == Sex.MALE ?
-                            (float) (exercise.getRatioPerLevelMale().get(0) - 0.15) * userWeight :
-                            (float) (exercise.getRatioPerLevelFemale().get(0) - 0.15) * userWeight)
+                            (float) ((exercise.getRatioPerLevelMale().get(0) - (exercise.getRatioPerLevelMale().get(0) * 0.15))) * userWeight :
+                            (float) ((exercise.getRatioPerLevelFemale().get(0) - (exercise.getRatioPerLevelFemale().get(0) * 0.15))) * userWeight)
                     .build();
             exerciseRepository.save(e);
             userLastResultExercises.add(e);
