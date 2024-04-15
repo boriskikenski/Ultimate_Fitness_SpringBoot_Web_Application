@@ -1,6 +1,6 @@
 package com.bkikenski.ultimatefitness.service;
 
-import com.bkikenski.ultimatefitness.model.DietPlan;
+import com.bkikenski.ultimatefitness.model.entity.DietPlan;
 import com.bkikenski.ultimatefitness.model.dto.*;
 import com.bkikenski.ultimatefitness.model.enumerations.FitnessPlans;
 import com.bkikenski.ultimatefitness.model.enumerations.Goals;

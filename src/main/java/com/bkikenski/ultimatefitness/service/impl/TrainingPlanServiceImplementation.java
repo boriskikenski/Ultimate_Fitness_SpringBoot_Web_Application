@@ -1,8 +1,8 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
-import com.bkikenski.ultimatefitness.model.Exercise;
-import com.bkikenski.ultimatefitness.model.Training;
-import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.entity.Exercise;
+import com.bkikenski.ultimatefitness.model.entity.Training;
+import com.bkikenski.ultimatefitness.model.entity.User;
 import com.bkikenski.ultimatefitness.model.enumerations.*;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;
 import com.bkikenski.ultimatefitness.repository.ExerciseRepository;

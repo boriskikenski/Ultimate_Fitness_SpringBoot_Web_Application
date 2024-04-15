@@ -1,6 +1,6 @@
 package com.bkikenski.ultimatefitness.config;
 
-import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.entity.User;
 import com.bkikenski.ultimatefitness.repository.UserRepository;
 import com.bkikenski.ultimatefitness.service.DietPlanService;
 import com.bkikenski.ultimatefitness.service.TrainingPlanService;

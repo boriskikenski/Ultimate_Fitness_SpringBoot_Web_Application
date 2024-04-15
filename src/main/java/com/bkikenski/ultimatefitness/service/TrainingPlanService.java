@@ -1,7 +1,7 @@
 package com.bkikenski.ultimatefitness.service;
 
-import com.bkikenski.ultimatefitness.model.Training;
-import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.entity.Training;
+import com.bkikenski.ultimatefitness.model.entity.User;
 import com.bkikenski.ultimatefitness.model.enumerations.Days;
 import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import com.bkikenski.ultimatefitness.model.enumerations.MuscleGroup;

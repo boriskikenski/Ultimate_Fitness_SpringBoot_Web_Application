@@ -1,8 +1,8 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
-import com.bkikenski.ultimatefitness.model.Exercise;
-import com.bkikenski.ultimatefitness.model.WeeklyResults;
-import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.entity.Exercise;
+import com.bkikenski.ultimatefitness.model.entity.WeeklyResults;
+import com.bkikenski.ultimatefitness.model.entity.User;
 import com.bkikenski.ultimatefitness.model.dto.ExerciseDTO;
 import com.bkikenski.ultimatefitness.model.dto.ExerciseResultsDTO;
 import com.bkikenski.ultimatefitness.model.dto.RapidAPIResponseDTO;

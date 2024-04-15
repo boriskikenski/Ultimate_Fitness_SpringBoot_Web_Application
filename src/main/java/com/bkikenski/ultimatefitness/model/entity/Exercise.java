@@ -1,4 +1,4 @@
-package com.bkikenski.ultimatefitness.model;
+package com.bkikenski.ultimatefitness.model.entity;
 
 import com.bkikenski.ultimatefitness.model.enumerations.ExercisesConstants;
 import jakarta.persistence.*;

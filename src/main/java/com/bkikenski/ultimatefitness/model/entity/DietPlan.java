@@ -1,4 +1,4 @@
-package com.bkikenski.ultimatefitness.model;
+package com.bkikenski.ultimatefitness.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

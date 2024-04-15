@@ -1,7 +1,7 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
-import com.bkikenski.ultimatefitness.model.*;
 import com.bkikenski.ultimatefitness.model.dto.*;
+import com.bkikenski.ultimatefitness.model.entity.*;
 import com.bkikenski.ultimatefitness.model.enumerations.*;
 import com.bkikenski.ultimatefitness.model.exceptions.PasswordsDoNotMatchException;
 import com.bkikenski.ultimatefitness.model.exceptions.UserNotFoundException;

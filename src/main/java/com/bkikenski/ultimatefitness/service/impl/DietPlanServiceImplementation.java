@@ -1,7 +1,7 @@
 package com.bkikenski.ultimatefitness.service.impl;
 
-import com.bkikenski.ultimatefitness.model.DietPlan;
-import com.bkikenski.ultimatefitness.model.User;
+import com.bkikenski.ultimatefitness.model.entity.DietPlan;
+import com.bkikenski.ultimatefitness.model.entity.User;
 import com.bkikenski.ultimatefitness.model.enumerations.FitnessLevels;
 import com.bkikenski.ultimatefitness.model.enumerations.Goals;
 import com.bkikenski.ultimatefitness.model.enumerations.Sex;

@@ -1,6 +1,6 @@
 package com.bkikenski.ultimatefitness.web;
 
-import com.bkikenski.ultimatefitness.model.DietPlan;
+import com.bkikenski.ultimatefitness.model.entity.DietPlan;
 import com.bkikenski.ultimatefitness.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
