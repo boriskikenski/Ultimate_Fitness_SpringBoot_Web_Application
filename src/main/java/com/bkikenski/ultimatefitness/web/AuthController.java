@@ -60,11 +60,6 @@ public class AuthController {
         return "register-insert-results";
     }
 
-    @PostMapping("/login-user")
-    public String login(){
-        return "home";
-    }
-
     @PostMapping("/register-personal-info")
     public ModelAndView registerStepOne(RegisterPersonalInfoDTO request,
                                         RedirectAttributes redirectAttributes){
